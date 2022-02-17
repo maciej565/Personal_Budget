@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block body %}
+<div class="row">
+<!--Powitanie-->
+	<div class=" col-12 d-flex justify-content-center welcomeBar">						
+		<div class= "col-12 d-flex justify-content-center">
+			<span class="col-12 text-center title py-5">
+			Witaj {{username}} 
+			<i class="far fa-smile pl-2"></i></span>									
+		</div>
+	</div>
+	<!--Kafelki-->
+	<div class="row col-12 d-flex basicContainer">
+		
+		<div class="col-12 col-sm-6 text-center">
+			<div class="d-flex col-12 justify-content-center">				
+					<a href="/addIncome/new" class="nav-link customNavigationText">
+						<p><i class="fas fa-euro-sign pr-1 addIncomeBar"></i></p>
+						<p>Dodaj przychód</p>
+					</a>
+			</div>
+			<div class="d-flex col-12 justify-content-center">				
+					<a href="/addExpense/new" class="nav-link customNavigationText">
+						<p><i class="fas fa-credit-card pr-1 addExpenseBar"></i></p>
+						<p>Dodaj wydatek</p>
+					</a>
+			</div>						
+		</div>
+						
+		<div class="col-12 col-sm-6 text-center">							
+			<div class="d-flex col-12 justify-content-center">								
+					<a href="/showBalance/currentMonth" class="nav-link customNavigationText">
+						<p><i class="fas fa-chart-bar currentMonthBalanceBar"></i></p>
+						<p class="">Twój bilans z bieżącego miesiąca: <br>
+							{% if currentMonthBalance>0 %}										
+								<span style='color:green;'>{{currentMonthBalance}} zł</span>
+							{%  elseif currentMonthBalance<0 %}
+								<span style='color:red;'>{{currentMonthBalance}} zł</span>										
+							{% else %}									
+								<span>{{currentMonthBalance}}zł<br>Brak przychodów oraz wydatków w danym okresie</span>
+							{% endif %}
+						</p>									
+					</a>
+			</div>
+			<div class="d-flex col-12 justify-content-center">							
+					<a href="/showBalance/lastMonth" class="nav-link customNavigationText">
+						<p><i class="fas fa-chart-bar previousMonthBalanceBar"></i></p>
+						<p class="">Twój bilans z poprzedniego miesiąca: <br>
+							{% if lastMonthBalance>0 %}										
+								<span style='color:green;'>{{lastMonthBalance}} zł</span>
+							{%  elseif lastMonthBalance<0 %}
+								<span style='color:red;'>{{lastMonthBalance}} zł</span>										
+							{% else %}									
+								<span>{{lastMonthBalance}}zł<br>Brak przychodów oraz wydatków w danym okresie</span>
+							{% endif %}							
+						</p>	
+					</a>															
+			</div>													
+		</div>							
+	</div>
+</div>				
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

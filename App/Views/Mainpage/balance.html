@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Bilans{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row d-flex justify-content-center">
+	<div class="balanceContainer col-12 col-sm-10 ">						
+		<form class="card-body mx-auto" action="selectPeriod" method="post">
+			<div class="col-12 text-center">						
+				<span class="card-title title">Bilans:</span>
+			</div>
+			
+			<hr>
+												
+			<div class="row d-flex justify-content-center">
+				<div class="row col-12 col-md-8 py-1 d-flex justify-content-center ">
+					<div class="col-12 text-center">
+						<label class="formTitle">Wybierz okres</label>
+					</div>
+					
+					<div class="col-12 col-md-8">
+						<select class="form-control borderDesign text-left" id="option_number" name="option_number" autocomplete="off" onchange='if(this.value != 4) { this.form.submit(); }'>  
+							<option title = "Wybierz okres" value="" disabled selected hidden>{{balancePeriod}}</option>			
+							<option value="1">Bieżący miesiąc</option>
+                            <option value="2">Ostatni miesiąc</option>
+                            <option value="3">Bieżący rok</option> 
+                            <option value="4">Własny przedział czasu</option>                             
+     						</select>											
+					</div>										
+				</div>									
+			</div>
+		</form>
+		<div class="col-12">
+			<div class="modal fade" id="balanceModal" tabindex="-1" role="dialog" aria-labelledby="balanceModalId" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h6 class="modal-title" id="balanceModalId">Podaj zakres bilansu:</h6>
+						</div>
+						<form action="selectedDate" method='post'>
+							<div class="modal-body">
+								<div class="fontel"><i class="icon-calendar-1"></i></div>
+								<input class="form-control" value ="{{first_date}}" name="first_date" id="first_date" type='date' style='max-width:200px' required/>	
+								<br>
+								<div class="fontel"><i class="icon-calendar-1"></i></div>
+								<input class="form-control" value = "{{second_date}}" name="second_date" id="second_date"  type='date' style='max-width:200px' required />			
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+								<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-12 col-lg-6 py-1">	
+				<div class="form-group col-12">									
+					<div class="row d-flex justify-content-center">
+						<label class="balanceTitle col-12"><i class="fas fa-euro-sign pr-2" style="color:green;"></i>Przychody:</label>
+						<div class="col-12 col-xl-10 py-1 tebleDesign">
+							<table class="table incomeTable" id="incomeTable">
+								<thead>
+									<tr>       
+										<th scope="col">   
+											Data
+										</th>
+										<th scope="col">
+											Kategoria
+										</th>
+										
+										<th scope="col">   
+											Kwota
+										</th>
+										<th scope="col">   
+											Komentarz
+										</th>
+										<th></th>	
+									</tr>
+								</thead>
+								<tbody>
+								{% for value in incomeBalanceTable %}
+								<tr>
+									<td>{{value.date_of_income}}</td>
+									<td>{{value.name}}</td>
+									<td>{{value.amount}}</td>
+									<td>{{value.income_comment}}</td>
+									<td><a href='' style='color:black;'><i class='fas fa-edit'></i></a><a href='' style='color:red;'><i class='fas fa-ban'></i></a></td>
+                                </tr>                      
+                            	{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-12 col-md-12 col-lg-6 py-1">	
+				<div class="form-group col-12">									
+					<div class="row d-flex justify-content-center">							
+					<label class="balanceTitle col-12"><i class="fas fa-credit-card pr-2" style="color:red;"></i>Wydatki:</label>
+						<div class="col-12 col-xl-10 py-1 tebleDesign">
+							<table class="table expenseTable" id="expenseTable">
+								<thead>
+									<tr>       
+										<th scope="col">
+											Data
+										</th>
+										<th scope="col">
+											Kategoria
+										</th>
+										<th scope="col">   
+											Kwota
+										</th>
+										<th scope="col">   
+											Komentarz
+										</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+								{% for value in expenseBalanceTable %}
+								<tr>
+									<td>{{value.date_of_expense}}</td>
+									<td>{{value.name}}</td>
+									<td>{{value.amount}}</td>
+									<td>{{value.expense_comment}}</td>
+									<td><a href='' style='color:black;'><i class='fas fa-edit'></i></a><a href='' style='color:red;'><i class='fas fa-ban'></i></a></td>
+                                </tr>
+                            	{% endfor %}
+								</tbody>
+							</table>						
+						</div>
+					</div>	
+				</div>										
+			</div>
+
+			<div class="col-12 d-flex justify-content-center">
+				<div class="col-8 progressBar">
+					<div class="balanceTitle"><i class="fas fa-chart-bar pr-1" style=" font-size: 60px;"></i>
+						<br>	
+						<span class="">Twój bilans {{balanceTitle}}:</span>
+						<br>
+							{% if balance>0 %}										
+								<span style='color:green;'>{{balance}} zł</span>
+							{%  elseif balance<0 %}
+								<span style='color:red;'>{{balance}} zł</span>										
+							{% else %}									
+								<span>{{balance}}zł<br>Brak przychodów oraz wydatków w danym okresie</span>
+							{% endif %}
+					</div>
+					<br>
+					{% if percentageIncome!=0 or percentageExpense!=0 %}
+					<div class="progress">
+					{% if percentageIncome!=0 %}									
+							<div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{percentageIncome}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageIncome}}%"></div>
+					{% endif %}
+					{% if percentageExpense!=0 %}
+							<div class="progress-bar bg-danger" role="progressbar"  aria-valuenow="{{percentageExpense}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageExpense}}%"></div>
+					{% endif %}
+					{% endif %}												
+					</div>
+				</div>
+			</div>
+			<div class="col-12 py-5">
+				<div class="row col-12">
+					{% if percentageIncome!=0 %}										
+						<div class="col-12 col-md-6 col-lg-6" id="income_chart" style="height: 370px; width: 100%;"></div>								
+					{% endif %}
+
+					{% if percentageExpense!=0 %}										
+						<div class="col-12 col-md-6 col-lg-6" id="expense_chart" style="height: 370px; width: 100%;"></div>								
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+<br>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+	$(document).ready(function()
+	{
+    $('#option_number').change(function() 
+    {
+        var opval = $(this).val();
+        if(opval=="4")
+        {
+            $('#balanceModal').modal("show");
+        }
+    });
+});
+</script>
+
+
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+        let incomeEncoded = "{{ incomeDataPoints|json_encode|e('js') }}";
+        let expenseEncoded = "{{ expenseDataPoints|json_encode|e('js') }}";
+        let balanceSummary = "{{ balance }}";
+</script>
+<script src="/js/balance.js"></script>
+{% endblock %}
