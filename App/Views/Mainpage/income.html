@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Dodaj przychód{% endblock %}
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="row">
+			<div class="col-1 col-sm-2 col-lg-3 col-xl-3 text-center "></div>
+			<div class="addIncomeContainer col-12 col-sm-8 col-lg-6 col-xl-6 text-center">
+				<form class="card-body mx-auto" action="create" method="post" >
+					
+					<br>
+						
+					<span class="card-title title">Dodaj przychód</span>
+						
+					<hr>
+			
+					<div class="row">					
+						<div class="col-12 col-md-6 py-1">								
+							<label class="formTitle" for="amount">Kwota:</label>									
+							<input type="number" class="form-control borderDesign"  step="0.01" placeholder="0.00" min="0.01" max="999999.99" name="amount" value = "{{incomes.amount}}" autocomplete="off" required>
+							{% if errors.amountError is not empty%}                            
+                            <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                          
+                            {% endif %}	
+						</div>
+						
+						<div class="col-12 col-md-6 py-1 ">								
+							<label class="formTitle">Data:</label>
+							<input type="date" class="form-control borderDesign" id="date" name="date" type="date" value = "{% if incomes.date is defined %}{{incomes.date}}{% else %}{{currentDate}}{% endif %}" required>
+
+                            {% if errors.dateError is not empty%}                            
+                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                            
+                            {% endif %}
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-12 col-md-6 py-1">								
+							<label class="formTitle">Kategoria:</label>	
+
+							<select class="form-control col-12 borderDesign" name="category" required>
+							<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+							{% for value in userIncomeCategories %}
+                            <option value="{{value.name}}"> {{value.name}} </option>                                
+                            {% endfor %}
+							</select>
+						</div>
+						
+						<div class="col-12 col-md-6 py-1">
+							<label class="formTitle" for="comment">Dodaj komentarz</label>
+							<div class="d-sm-block ">
+								<textarea class="form-control borderDesign" rows="1" id="comment"  placeholder="Dodaj komentarz..."  name = "comment">{{incomes.comment}}</textarea>
+							</div>		
+						</div>
+					</div>
+										
+					<div class="row d-flex justify-content-center py-4">
+						<div class="col-12 col-sm-1"></div>
+						<button id="submitBtn" class="btn btn-success col-8 col-sm-4" type="submit" value="Submit">Dodaj</button>	
+						<div class="col-12 col-sm-2"></div>
+						<br>
+						<button class="btn btn-danger col-8 col-sm-4" type="reset" value="Reset">Anuluj</button>
+						<div class="col-12 col-sm-1"></div>
+						{% if success == true %}
+						<div class="py-3">
+							<span style="font-size:20px;">Dodano przychód dla kategorii: {{category}}</span>
+							<br>
+							<span style="font-size:20px;">w wysokości: </span>
+							<span style="color: green; font-size:20px;">{{amount}}</span>
+							<br>
+							<span style="font-size:20px;"> z dnia: </span>							
+							<span style="font-size:20px;">{{date}}</span>
+						</div>							
+						{% endif %}
+					</div>
+					<br>
+					
+								
+				</form>	
+			</div>		
+			<br>		
+			<div class="col-sm-2 col-lg-3 col-xl-3 "></div>	
+		</div>
+			
+		<div class="col-1 col-sm-2 col-lg-3 col-xl-4 "></div>			
+{% endblock %}
+
+{% block scripts %}
+ 
+{% endblock %}

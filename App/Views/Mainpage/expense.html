@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Dodaj wydatek{% endblock %}
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-center">
+			<div class="addExpenseContainer col-12 col-sm-8 col-lg-6 col-xl-6 text-center">
+				<form class="card-body mx-auto" action="create" method="post">
+					<br>
+					<span class="card-title title">Dodaj wydatek</span>
+					<hr>
+					<div class="row">											
+						<div class="col-12 col-md-6 py-1">								
+							<label class="formTitle" for="expense_amount">Kwota:</label>						
+							<input class="form-control borderDesign" type="number" step="0.01" placeholder="0.00" min="0.01" max="999999.99" id="expense_amount" name="expense_amount" value="{{expenses.amount}}" autocomplete="off" required>
+							{% if errors.amountError is not empty%}                            
+                            <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                         
+                            {% endif %}	
+						</div>
+						
+						<!-- expense_date -->
+						<div class="col-12 col-md-6 py-1 ">								
+							<label class="formTitle">Data:</label>
+							<input type="date" class="form-control borderDesign" name="date" type="date" value = "{% if expenses.date is defined %}{{expenses.date}}{% else %}{{currentDate}}{% endif %}" required>
+							{% if errors.dateError is not empty%}                            
+                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                          
+                            {% endif %}
+						</div>
+					</div>
+					
+					<div class="row d-flex justify-content-center">
+						<div class="col-12 col-md-6 py-1">
+							<label class="formTitle">Kategoria:</label>
+							<select class="form-control col-12 borderDesign" name="expense_category" required>
+							<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+							{% for value in userExpenseCategories %}
+                            <option value="{{value.name}}"> {{value.name}} </option>                                
+                            {% endfor %}
+							</select>
+						</div>	
+							
+						<div class="col-12 col-md-6 py-1">
+							<label class="formTitle">Płatność:</label>
+							<select class="form-control borderDesign" name="payment_category" required>
+							<option title = "Wybierz rodzaj płatności" value="" disabled selected hidden> Wybierz rodzaj płatności</option>
+							{% for value in userPaymentMethods %}
+                            <option value="{{value.name}}">{{value.name}}</option>                                
+                            {% endfor %}	
+							</select>	
+						</div>						
+							<div class="col-12 col-md-6 py-4">
+								<label class="formTitle" for="expense_note">Dodaj komentarz</label>
+									<textarea class="form-control borderDesign" id="expense_note" placeholder="Dodaj komentarz..." rows="1" name = "expense_note" >{{expenses.note}}</textarea>	
+					</div>	
+
+					<div class="row col-12 d-flex justify-content-center py-4">
+						<div class="col-12 col-sm-1"></div>
+						<button id="submitBtn" class="btn btn-success col-8 col-sm-4" type="submit" value="Submit">Dodaj</button>	
+						<div class="col-12 col-sm-2"></div>
+						<br>
+						<button class="btn btn-danger col-8 col-sm-4" type="reset" value="Reset">Anuluj</button>
+						<div class="col-12 col-sm-1"></div>
+						{% if success == true %}
+						<div class="py-3">
+							<span style="font-size:20px;">Dodano wydatek dla kategorii: {{expense_category}}</span>
+							<br>
+							<span style="font-size:20px;">w wysokości: </span>
+							<span style="color: red; font-size:20px;">{{expense_amount}}</span>
+							<br>
+							<span style="font-size:20px;"> z dnia: </span>							
+							<span style="font-size:20px;">{{date}}</span>
+						</div>							
+						{% endif %}
+					</div>
+					<br>
+					</div>
+				</form>		
+			</div>
+		</div>				
+		<br>
+		
+{% endblock %}
+
+{% block scripts %}
+      
+{% endblock %}
