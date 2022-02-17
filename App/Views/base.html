@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html lang="pl">
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+    	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<meta name="keywords" content="keywords, budżet, osobisty, wydatki, aplikacja ,kalkulator">
+    	<meta name="author" content="Maciej Kłosiński">
+    	<meta http-equiv="X-Ua-Compatible" content="IE=edge">
+    	<link rel="stylesheet" href="/css/style.css" type="text/css">
+    	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">    	
+    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&display=swap" rel="stylesheet">
+    	{% block head %}
+		{% endblock %}
+	</head>
+
+	{% block bodyStyle %}<body>{% endblock %}
+		<main>
+			<header>
+				{% block header %}
+				<div class= "standardNavbar">
+					<nav class="navbar-expand-xl navbar navbar-dark">
+						<a class="navbar-brand" href=""> <img src="/img/logo.svg"  class="logo" alt="Budżet osobisty"></a>
+						<button class=" navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						
+						<div class="collapse navbar-collapse" id="mainmenu">
+							<ul class="navbar-nav mx-auto ">					
+								<li class="nav-item mx-xl-1">								
+									<a href="/Mainpage/mainpage" class="nav-link standardNavButtons"><i class="fas fa-home pr-2"></i>Strona główna</a>
+								</li>
+								<li class="nav-item mx-xl-1">								
+									<a href="/addIncome/new" class="nav-link standardNavButtons"><i class="fas fa-euro-sign pr-1"></i>Dodaj przychód</a>
+								</li>
+								<li class="nav-item mx-xl-1">
+									<a href="/addExpense/new" class="nav-link standardNavButtons"><i class="fas fa-credit-card pr-1"></i>Dodaj wydatek</a>
+								</li>
+								<li class="nav-item mx-xl-1">
+										<a href="/showBalance/currentMonth" class="nav-link standardNavButtons"><i class="fas fa-chart-bar pr-1"></i>Przeglądaj bilans</a>
+								</li>							
+							</ul> 
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item dropdown">																			
+									<a class="nav-link dropdown-toggle standardNavButtons" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog pr-1"></i>Ustawienia</a>								
+									<div class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+										<a class="dropdown-item " href="#" >Zmień dane</a>
+										<a class="dropdown-item" href="#" >Zmień hasło</a>
+									</div>								
+								</li>
+								<li class="nav-item mx-lg-1">
+									<a href="/logout" class="nav-link standardNavButtons"><i class="fas fa-sign-out-alt pr-1"></i>Wyloguj</a>
+								</li>							
+							</ul>    					
+						</div>						
+					</nav>
+				</div>
+				{% endblock %}
+			</header>	
+
+			{% block body%}
+			
+			{% endblock %}		
+		</main>
+
+		{% block footer %}	
+		<footer class="flex-shrink-0 py-2 ">
+			<div class="container text-center customFooter">
+				Wszystkie prawa zastrzeżone &copy; 2021
+			</div>	
+		</footer>
+		{% endblock %}
+
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+		
+
+
+
+		{% block scripts %}
+		{% endblock %}
+	</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block head %}
+
+{% endblock %}
+
+{% block header %}
+	<nav class="navbar-expand-lg navbar navbar-dark">
+		<a class="navbar-brand" href=""> <img src="./img/logo.svg"  class="logo" alt="Budżet osobisty"></a>											
+		<button class=" navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#mainMenuNav" aria-expanded="false" aria-label="Przełącznik nawigacji">
+			<span class="navbar-toggler-icon"></span>
+		</button>						
+		<div class="collapse navbar-collapse pr-3" id="mainMenuNav">		
+			<ul class="navbar-nav ml-auto">						
+				<li class="nav-item pr-4">
+					<a href="login/new" class="nav-link customNavbar ">Logowanie</a>
+				</li>
+				<li class="nav-item pr-4">
+					<a href="/Signup/new" class="nav-link customNavbar">Rejestracja</a>
+				</li>														
+			</ul>    					
+		</div>					
+	</nav>
+{% endblock %}
+
+{% block bodyStyle %}<body class="presentation">{% endblock %}
+
+{% block body %}
+<div class="row">			
+	<div class="hidden-sm col-md-1 col-xl-2"></div>
+	<div class="col-12 col-sm-12 col-md-10 col-xl-8 invitationContainer d-flex justify-content-center">
+		<div class="col-12 advertTitle text-center">						
+			<h1>BUDŻET OSOBISTY</h1>
+			<br>							
+			<h2>Planuj i zarządzaj wydatkami.</h2>							
+			<h2>Bo warto mieć finanse pod kontrolą.</h2>
+		</div>	
+	</div>			
+	<div class="hidden-sm col-md-1 col-xl-2"></div>
+	<div class="hidden-sm col-md-1 col-xl-2"></div>
+	<div class="col-sm-12 col-md-10 col-xl-8 d-flex justify-content-center">
+		<div class="col-12 col-sm-10 col-xl-9 registerExtraButton">
+			<form class="mx-auto d-flex justify-content-center" action= "/Signup/new">													
+				<button class="col-10 col-sm-8 col-md-7 btn btn-info btn-lg btn-block customButton" type="submit" onclick="/Signup/new" ><h3>Załóż darmowe konto</h3></button>							
+			</form>									
+		</div>
+	</div>
+	<div class="hidden-sm col-md-1 col-xl-2"></div>
+</div>
+{% endblock %}
+{% block footer %}
+<footer class="flex-shrink-0 py-2 customFooter">
+<div class="container text-center">
+	Wszystkie prawa zastrzeżone &copy; 2021	
+</div>		
+</footer>
+{% endblock %}
