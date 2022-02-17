@@ -1,0 +1,5 @@
+Personal_Budget - Aktywacja konta.
+Dziękuję za rejestrację w naszej aplikacji.
+Kliknij poniższy link aby aktywować swoje konto.
+
+{{ url }}

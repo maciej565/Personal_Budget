@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}Rejestracja{% endblock %}
+{% block head %}
+<script src="https://www.google.com/recaptcha/api.js"></script>
+{% endblock %}
+
+{% block header %}
+	<div class="logoBarDesign">
+		<nav class="row navbar-expand-lg navbar navbar-dark">						
+			<a href="https://budget.maciej-klosinski.profesjonalnyprogramista.pl" class=""> <img src="/img/logo.svg" class="" alt="Budżet osobisty"></a>
+		</nav>
+	</div>
+{% endblock %}
+
+{% block body %}
+<div class="row align-items-center">
+<div class="col-1 col-sm-2 col-lg-3 col-xl-4 "></div>
+	<div class="registerContainer col-10 col-sm-8 col-lg-6 col-xl-4 text-center">	
+		<form class="card-body mx-auto" id="signupForm" method="post" action="/signup/create">
+			<span class="card-title title">Rejestracja</span>
+			<hr>
+
+			<div class="form-group input-group borderDesign">									
+				<span class="input-group-text borderDesign"> <i class="fa fa-user"></i></span>
+				<input class="form-control borderDesign" placeholder="podaj login" name="username" value = "{{user.username}}" required/>
+			</div>
+             {% if user.nameErrors is not empty %}
+                <div class="error">
+                {% for nameErrors in user.nameErrors %}
+                <p>{{nameErrors}}</p>
+                {% endfor %}
+                </div>
+             {% endif %}
+				
+			<div class="form-group input-group">	
+				<span class="input-group-text borderDesign"> <i class="fa fa-envelope "></i></span>								 
+				<input class="form-control borderDesign" placeholder="adres e-mail" name="email" value = "{{user.email}}" required type="email"/>
+			</div> 
+            {% if user.emailErrors is not empty %}
+                <div class="error">
+                {% for emailErrors in user.emailErrors %}
+                <p>{{emailErrors}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+			
+			<div class="form-group input-group">
+				<span class="input-group-text borderDesign"><i class="fa fa-lock"></i></span>
+				<input type="password" class="form-control borderDesign" id="password1" placeholder="hasło" name="password1"/>
+			</div>
+            {% if user.passwordErrors is not empty %}
+                <div class="error">
+                {% for passwordErrors in user.passwordErrors %}
+               	<p>{{passwordErrors}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+			
+			<div class="form-group input-group">
+                <span class="input-group-text borderDesign "><i class="fa fa-lock"></i></span>
+                <input class="form-control borderDesign" id="password2" placeholder="hasło" name="password2" type="password">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <a href="#" class="text-dark" id="icon-click">
+                            <i class="fas fa-eye" id="icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class>{{activationInfo}}</div>
+            
+			<div class="form-group input-group d-flex justify-content-center">
+				<div class="g-recaptcha" data-sitekey="6Lf-uuAdAAAAAB6jgRtDUBaJ5rgxM8aZmJQPQnce"></div> 
+			</div>
+			
+            {% if user.captchaErrors is not empty %}
+                <div class="error">
+                {% for captchaErrors in user.captchaErrors %}
+                <p>{{captchaErrors}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+            
+			<div class= "d-flex justify-content-center">		
+				<button type="submit" class="col-8 col-sm-6 btn btn-lg btn-info btn-block standardButton">Utwórz konto</button>
+			</div>
+			<hr>			
+			<p>Posiadasz konto? <a href="/login/new">Zaloguj się</a></p>							
+		</form>
+	</div>
+	<div class="col-1 col-sm-2 col-lg-3 col-xl-4 "></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/hideShowPassword.min.js"></script>
+<script src="/js/validatePassword.js"></script>
+<script>
+    $(document).ready(function() 
+        {
+            $('#signupForm').validate(
+            {
+                rules: 
+                {
+                    username: 'required',
+                    email: 
+                    {
+                        required: true,
+                        email: true
+                        remote: '/account/validate-email'
+                    },
+                    password1: 
+                    {
+                        required: true,
+                        minlength: 8,
+                        validPassword: true
+                    },
+                    password2: 
+                    {
+                        equalTo: '#password1'
+                    }
+                },
+                messages: 
+                {
+                    email: 
+                    {
+                        remote: 'Podany email znajduje się juz w bazie danych'
+                    }
+                }
+        	});
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#icon-click").click(function(){
+            $("#icon").toggleClass("fa-eye-slash");
+            var input = $("#password2");
+            if(input.attr("type")==="password")
+            {
+                input.attr("type","text");
+            }
+            else
+            {
+                input.attr("type","password");
+            }
+        });
+    });
+</script>
+
+
+
+{% endblock %}
