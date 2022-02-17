@@ -1,0 +1,714 @@
+
+/*-----------------------------------------------------ELEMENTY POWTARZALNE DLA KAŻDEJ STRONY----------------------------------------------------*/
+
+/*Formatowanie ogólne*/
+html
+{
+	height: 100%;	
+}
+
+body
+{		
+	height: 100%;
+	text-align:center;	
+	background-color: #f2f2f2 !important ;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size:cover;
+	font-family: 'Oswald', sans-serif;
+}
+
+form
+{
+	padding: 5px;
+}
+
+table 
+{
+	overflow-x:auto;
+	width:100%;
+    border-collapse:separate !important;
+    border:solid black 1px;
+    border-radius:6px;
+	text-align: center;
+   
+}
+.table:hover
+{
+	border-color: #1073FF !important;
+	
+}
+
+.table:hover td,.table:hover th
+{	
+	border-left-color: #1073FF !important;
+	border-top-color: #1073FF !important;
+}
+
+
+td, th 
+{
+    border-left:solid black 1px!important;
+    border-top:solid black 1px !important;
+}
+
+th 
+{    
+    border-top: none !important;
+	border-bottom: none !important
+}
+
+td:first-child, th:first-child {
+     border-left: none!important;
+}
+
+
+td:first-child, th:first-child {
+     border-left: none!important;
+}
+
+h1
+{
+	font-size:3.0rem !important;
+}
+
+@media (min-width: 768px) 
+{ 
+  h1
+ {
+	 font-size:3.6rem !important;
+ }
+}
+
+@media (min-width: 992px) 
+{ 
+  h1
+ {
+	 font-size:4.4rem !important;
+ }
+}
+
+h2
+{
+	font-size:2.2rem !important;
+}
+
+@media (min-width: 768px) 
+{ 
+  h2
+ {
+	 font-size:2.7rem !important;
+ }
+}
+
+@media (min-width: 992px) 
+{ 
+  h2
+ {
+	 font-size:3.3rem !important;
+ }
+}
+
+h3
+{
+	font-size:1.2rem !important;
+}
+
+
+@media (min-width: 768px) 
+{ 
+  h3
+ {
+	 font-size:1.2rem !important;
+ }
+}
+
+@media (min-width: 992px) 
+{ 
+  h3
+ {
+	 font-size:1.5rem !important;
+ }
+}
+
+header
+{
+	font-family: 'Oswald', sans-serif;
+}
+
+footer
+{
+	font-family: 'Oswald', sans-serif;	
+	background-color: #092834;	
+	min-height:20px;	
+	position:fixed;
+	bottom:0;	
+	width: 100%;
+	font-size: 14px;
+	font-weight:normal;
+}
+
+input:focus, input:hover
+{
+	border-color: #1073FF !important;
+	font-weight:bold;
+}
+
+.btn-danger:hover, .btn-danger:focus
+{
+	color:#dc3545!important;
+	background-color:#ffffff !important;
+	font-weight:bold;
+}
+
+.btn-success:hover,.btn-success:focus
+{
+	color:#28a745!important;
+	background-color:#ffffff !important;
+	font-weight:bold;
+}
+
+
+
+/*Formatowanie ogólne*/
+
+/*Tło prezentacji*/
+.presentation
+{
+background-image:url("../img/bg.png");
+}
+/*Tło prezentacji*/
+
+
+/* LOGO*/
+.logo
+{		
+	left:0;
+	width:auto;
+	display: block;
+}
+/*NAVBAR*/
+
+.title
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:32px;
+	font-weight:bold;
+}
+
+.dropdown-menu 
+{
+	color: #00C0E0;
+	background-color: #092834;
+	width:100%;
+}
+
+.navbar-nav li:hover>.dropdown-menu
+{
+	display: block;
+}
+
+.standardNavButtons
+{	
+	font-family: 'Oswald', sans-serif;
+	text-align:center;
+	font-weight:bold;
+	font-size:20px;
+	color: white !important;	
+}
+
+.standardnavButtons:hover, .standardnavButtons:focus
+{
+	color: #1073FF !important;
+}
+
+.standardNavbar
+{		
+	background-color: #092834 !important;
+}
+.standardButton
+{		
+	background-color: #1073FF !important ;
+	font-size:20px;
+	color: #FFFFFF !important;
+	letter-spacing: 2px;
+	padding: 15px 10px;
+	border-radius: 30px !important ;
+	border-width: 1px !important ;
+	border-color: #1073FF !important;
+}
+
+.standardButton:hover
+{
+	background-color: transparent !important ;
+	color: #1073FF !important;
+	
+	border-color: #1073FF !important;
+}
+
+.borderDesign
+{
+	border-width:1px !important;
+	border-color: #000000 !important;
+}
+
+.borderDesign:hover, .borderDesign:focus
+{	
+	border-color: #1073FF !important;	
+	font-weight:bold;
+}
+
+/*PODŚWIETLANIE OTWARTYCH STRON NAVBAR*/	
+.navbar-expand-xl .navbar-nav>.active>a, .navbar-expand-xl .navbar-nav>.active>a:focus, .navbar-expand-xl .navbar-nav>.active>a:hover 
+{
+	color: #092834;
+	background-color: #F0F7D4;
+	font-weight:700;
+}
+/*PODŚWIETLANIE OTWARTYCH STRON NAVBAR*/
+
+/*PODŚWIETLANIE NAVBAR*/
+.navbar-expand-xl .navbar-nav>li>a:focus, .navbar-expand-xl .navbar-nav>li>a:hover
+{	
+	color: #1073FF !important;
+	
+}
+
+/*PODŚWIETLANIE NAVBAR*/
+
+.navbar-expand-xl .navbar-nav>.open>a, .navbar-expand-xl .navbar-nav>.open>a:focus, .navbar-expand-xl .navbar-nav>.open>a:hover
+{
+	color: #092834;
+	background-color: #00C0E0;
+}
+/*NAVBAR*/
+
+/*Funkcjonalne*/
+
+	/*Testowanie wymiarów divów*/
+	.test1
+	{		
+		background-color: red!important;
+	}
+
+	.test2
+	{		
+		background-color: yellow!important;
+	}
+
+	.test3
+	{		
+		background-color: green!important;
+	}
+
+	.test4
+	{		
+		
+		background-color: grey!important;
+	}
+	/*Testowanie wymiarów divów*/
+	
+	.gap
+	{
+		height:5vh;
+	}	
+/*Funkcjonalne*/
+
+.formTitle
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:22px;
+	color:#000000;
+	text-align:center;
+}
+	
+/*-----------------------------------------------------ELEMENTY POWTARZALNE DLA KAŻDEJ STRONY----------------------------------------------------*/	
+
+
+/*---------------------------------------------------------index.html----------------------------------------------------------*/
+.main_title
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:4vh;
+	text-align:center;
+	
+}
+.customNavbar
+{	
+	font-size:24px;
+	color: white !important;	
+}
+
+.customNavbar:hover
+{
+	color: #1073FF !important;
+}
+
+.registerExtraButton
+{	
+	margin-top: 15vh;
+	font-weight: bold;	
+	margin-bottom:70px;
+}
+
+.customButton:hover
+{
+color: #1073FF !important;
+border-color: #1073FF !important;
+}
+
+.customButton
+{		
+	background-color: transparent !important ;
+	font-size:20px;
+	color: white !important ;
+	letter-spacing: 2px;
+	padding: 15px 10px;
+	border-radius: 30px !important ;
+	border-width: 4px !important ;
+	border-color: white !important ;
+}
+
+/*
+.sloganContainer
+{
+margin-top: 150px;		
+text-align:center;	
+font-weight: bold;
+font-size:32px;
+}
+*/
+.error
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:15px;		
+	text-align:center;	
+	font-weight: bold;
+	color:red !important;
+}
+.correct
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:18px !important;			
+	text-align:center;	
+	font-weight: bold;
+	color:green !important;
+}
+
+.invitationContainer
+{					
+	font-family: 'Oswald', sans-serif;
+	margin-top: 15vh;
+	text-align:center;	
+	font-weight: bold;
+	color:white;
+}
+
+.advertTitle
+{	
+	margin-bottom:20px;		
+}
+
+.advertLeft
+{
+	
+	margin-bottom:20px;
+}
+
+.advertRight
+{
+	font-size:24px;	
+	margin-top:65px;
+}
+
+/*STOPKA*/
+.customFooter
+{	
+	color: white;
+	background-color: transparent;	
+	opacity:0.8;
+}
+/*STOPKA*/
+
+/*---------------------------------------------------------index.html----------------------------------------------------------*/
+
+/*---------------------------------------------------------login.html/signup.html----------------------------------------------------------*/
+	
+/*pasekLogo*/
+.logoBarDesign
+{
+	max-height:100px;
+	padding-left:5px;
+    background-color: #092834 !important;
+	-webkit-box-shadow: 0px 15px 33px -10px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 15px 33px -10px rgba(0,0,0,0.75);
+	box-shadow: 0px 15px 33px -10px rgba(0,0,0,0.75);
+	color: white !important;
+}
+
+/*Powitanie*/	
+.welcomeBar
+{	
+	margin-top: 4vh;
+	margin-bottom: 4vh;
+	font-family: 'Oswald', sans-serif;
+	font-size:32px;		
+	font-weight: bold;
+	text-align: center;
+}
+.subtitle
+{
+	color:#000000;
+	font-size:24px;		
+	font-weight: bold;
+	text-align: center;
+}
+
+.extraText
+{	
+	color:black;
+	font-weight:bold;
+	font-family: 'Oswald', sans-serif;
+	margin-top:10px;
+	margin-bottom:70px ;
+	font-size:18px;
+}
+
+/*------------------------------------------------------------login.html/signup.html-------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------login.html--------------------------------------------------------------------*/		
+	
+.loginContainer
+{		
+	font-family: 'Oswald', sans-serif;
+	margin-top: 90px;
+	margin-bottom: 90px;
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);	
+}
+
+/*-----------------------------------------------------------------login.html--------------------------------------------------------------------*/		
+	
+/*-----------------------------------------------------------------signup.html--------------------------------------------------------------------*/
+.registerContainer
+{		
+	font-family: 'Oswald', sans-serif;
+	margin-top: 90px;
+	margin-bottom: 90px;
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);		
+}
+/*-----------------------------------------------------------------signup.html-------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------mainpage.html------------------------------------------------------------------*/
+.basicContainer
+{	
+	font-family: 'Oswald', sans-serif;	
+	margin-top: 2vh;
+	margin-bottom:2vh;	
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;	
+			
+}
+
+.addIncomeBar
+{	
+	color:#055F07;
+	font-size:120px;
+	margin:10px;
+}
+
+
+.addExpenseBar
+{	
+	color:#FF6800;
+	font-size:120px;
+	margin:10px;
+}
+
+.currentMonthBalanceBar
+{	
+	font-size:120px;
+	margin:10px;
+	color:#FF00FF;
+}
+
+.previousMonthBalanceBar
+{	
+	font-size:120px;
+	margin:10px;
+	color:#800080;
+}
+
+.addIncomeBar:hover,.addExpenseBar:hover,.currentMonthBalanceBar:hover,.previousMonthBalanceBar:hover
+{
+	color: #1073FF !important;
+}
+
+tbody.td
+{
+	color: #00FF00 !important;
+}
+	
+.positive
+{
+
+	color: #00ff00 !important;
+}
+
+.negative
+{
+	color: #FF0000 !important;
+}
+
+.customNavigationText
+{
+	font-size:20px;
+	color:#000000;
+}
+/*----------------------------------------------------------------mainpage.html------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------addincome.html------------------------------------------------------------------*/
+.addIncomeContainer
+{		
+	font-family: 'Oswald', sans-serif;
+	margin-top: 6vh;
+	margin-bottom: 10vh;
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;	
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);		
+}
+/*---------------------------------------------------------------addincome.html------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------addexpense.html------------------------------------------------------------------*/
+.addExpenseContainer
+{	
+	font-family: 'Oswald', sans-serif;
+	margin-top: 6vh;
+	margin-bottom: 10vh;
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);		
+}
+/*---------------------------------------------------------------addexpense.html------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------balance.html-------------------------------------------------------------------*/
+
+.balanceContainer
+{	
+	font-family: 'Oswald', sans-serif;
+	margin-top: 6vh;
+	margin-bottom: 10vh;
+	font-weight: bold;
+	border-radius: 45px;	
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+}
+.tebleDesign
+{
+	width: 100%;
+	overflow-x:auto;
+	text-align:center;	
+}
+
+.balanceTitle
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:24px;
+	font-weight:bold;
+	text-align: center;
+}
+
+
+table.incomeTable td.incomeCell
+{
+	color:green;
+}
+
+table.expenseTable td.expenseCell
+{
+	color:red;
+}
+.balanceFeedback
+{	
+	font-size: 18px;		
+}
+.progressBar
+{
+	padding-top:1vh;
+	padding-bottom:1vh;
+}
+.charts
+{
+	padding-top:1vh;
+	padding-bottom:1vh;
+}
+
+/*----------------------------------------------------------------ballance.html-------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
