@@ -370,15 +370,7 @@ border-color: #1073FF !important;
 	border-color: white !important ;
 }
 
-/*
-.sloganContainer
-{
-margin-top: 150px;		
-text-align:center;	
-font-weight: bold;
-font-size:32px;
-}
-*/
+
 .error
 {
 	font-family: 'Oswald', sans-serif;
@@ -422,14 +414,12 @@ font-size:32px;
 	margin-top:65px;
 }
 
-/*STOPKA*/
 .customFooter
 {	
 	color: white;
 	background-color: transparent;	
 	opacity:0.8;
 }
-/*STOPKA*/
 
 /*---------------------------------------------------------index.html----------------------------------------------------------*/
 
@@ -447,7 +437,7 @@ font-size:32px;
 	color: white !important;
 }
 
-/*Powitanie*/	
+
 .welcomeBar
 {	
 	margin-top: 4vh;
@@ -467,11 +457,9 @@ font-size:32px;
 
 .extraText
 {	
-	color:black;
+	color: #1073FF !important;
 	font-weight:bold;
 	font-family: 'Oswald', sans-serif;
-	margin-top:10px;
-	margin-bottom:70px ;
 	font-size:18px;
 }
 

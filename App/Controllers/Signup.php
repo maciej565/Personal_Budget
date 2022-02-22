@@ -44,7 +44,7 @@ class Signup extends \Core\Controller
 
 	public function successAction()
     {
-        $activationInfo =  "Rejestracja przebiegła pomyslnie! Na podany w formularzu adres e-mail wysłany został link aktywacyjny";
+        $activationInfo =  "Rejestracja przebiegła pomyslnie! Na podany w formularzu adres e-mail wysłany został link aktywacyjny.";
         View::renderTemplate('Signup/new.html',
             [
                 'activationInfo' => $activationInfo
