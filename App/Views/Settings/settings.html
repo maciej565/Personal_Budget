@@ -1,0 +1,327 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Ustawienia{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="col-1 col-sm-2 col-lg-3 col-xl-3 text-center"></div>
+	<div class="row settingsContainer col-12 col-sm-8 col-lg-6 col-xl-6 text-center d-flex justify-content-center">
+		<br>						
+		<div class="col-12 text-center">
+			<span class="card-title title">Ustawienia:</span>	
+			<div class="test"><p>The value is: <span></span></p></div>					
+			<hr>
+		</div>
+
+        <div class="col-md-12 nav nav-pills justify-content-center" id="pills-tab" role="tablist">
+        	<a href="#pills-personalData" class="nav-link active" id="pills-personalData-tab" data-toggle="pill" role="tab" aria-controls="pills-personalData" aria-selected="true">Dane osobowe</a>
+    		<a href="#pills-income" class="nav-link" id="pills-income-tab" data-toggle="pill" role="tab" aria-controls="pills-income" aria-selected="false">Przychody</a>
+    		<a href="#pills-expense" class="nav-link" id="pills-expense-tab" data-toggle="pill" role="tab" aria-controls="pills-expense" aria-selected="false">Wydatki</a>
+    		<a href="#pills-payment" class="nav-link" id="pills-payment-tab" data-toggle="pill"  role="tab" aria-controls="pills-payment" aria-selected="false">Płatności</a>
+        </div>
+
+        <div class="row tab-content col-md-12">
+        	<div class="col-12 col-md-3"></div>
+
+	        <div id="pills-personalData" class="tab-pane fade show active col-12 col-md-6">
+	        Dane osobowe
+		  	</div>
+		  	
+		  	<div class="tab-pane fade col-12 col-md-6" id="pills-income">
+		  		<div class="accordion col-12" id="incomeAccordionExample" aria-labelledby="headingOne" data-parent="#incomeAccordion">
+		       		<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingOne" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		          	Dodaj kategorię
+		        	</button>
+
+		      		<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#incomeAccordionExample">
+			        	<form class="card-body mx-auto" action="addIncomeCategory" method="post">      				
+							<div class="col-12">
+								<label class="formTitle" for="newIncomeCategory">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="newIncomeCategory" name="newIncomeCategory" value = "" required>
+							</div>
+							
+							<div class="d-flex justify-content-center py-4">
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
+							</div>
+						</form>	
+					</div>
+
+	    			<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					Edytuj kategorię
+					</button>
+
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#incomeAccordionExample">
+			        	<form class="card-body mx-auto" action="editIncomeCategory" method="post"> 
+			        		<label class="formTitle">Edytuj kategorię:</label>
+
+							<select class="form-control col-12 borderDesign" name="incomeCategory" required>
+								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
+								{% for value in userIncomeCategories %}
+	                            <option value="{{value.name}}">{{value.name}}</option>                                
+	                            {% endfor %}
+							</select>
+
+							<div class="col-12">
+								<label class="formTitle" for="editedIncomeCategory">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value = "" required>
+							</div>
+
+							<div class="d-flex justify-content-center py-4">
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
+							</div>
+						</form>	
+			    	</div>
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					Usuń kategorię 
+					</button>
+
+					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#incomeAccordionExample">
+			        	<form class="card-body mx-auto" action="deleteIncomeCategory" method="post">
+			        		<label class="formTitle">Usuń kategorię:</label>	  				
+							<select class="form-control col-12 borderDesign" name="deleteIncomeCategory" required>
+								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+								{% for value in userIncomeCategories %}
+	                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+	                        	{% endfor %}
+							</select>
+
+							<div class="d-flex justify-content-center py-4">
+								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
+							</div>
+						</form>	
+			    	</div>
+				</div>
+			</div>
+
+			<div class="tab-pane fade col-12 col-md-6" id="pills-expense">
+		        <div class="accordion col-12" id="expenseAccordionExample" aria-labelledby="headingFour" data-parent="#expenseAccordion">
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingFour" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+					Dodaj kategorię
+					</button>
+
+					<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#expenseAccordionExample">
+						<form class="card-body mx-auto" action="addExpenseCategory" method="post">      				
+							<div class="col-12">
+								<label class="formTitle" for="newExpenseCategory">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="newExpenseCategory" name="newExpenseCategory" value = "" required>
+							</div>
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+					Edytuj kategorię
+					</button>
+
+					<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#expenseAccordionExample">
+						<form class="card-body mx-auto" action="editExpenseCategory" method="post">
+							<label class="formTitle">Edytuj kategorię:</label>
+
+							<select class="form-control col-12 borderDesign" name="oldExpenseCategoryName" required>
+								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+								{% for value in userExpenseCategories %}
+								<option value="{{value.name}}">{{value.name}}</option>                                
+								{% endfor %}
+							</select>
+
+							<div class="col-12">
+								<label class="formTitle" for="editedExpenseCategory">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="editedExpenseCategory" name="editedExpenseCategory" value = "" required>
+							</div>
+
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+					Usuń kategorię 
+					</button>
+
+					<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#expenseAccordionExample">
+						<form class="card-body mx-auto" action="deleteExpenseCategory" method="post">
+							<label class="formTitle">Usuń kategorię:</label>	  				
+							<select class="form-control col-12 borderDesign" name="deleteExpenseCategory" required>
+								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+								{% for value in userExpenseCategories %}
+								<option value="{{value.name}}"> {{value.name}} </option>                              
+								{% endfor %}
+							</select>
+
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+				</div>	
+		  	</div>
+
+		  	<div class="tab-pane fade col-12 col-md-6" id="pills-payment">
+		        <div class="accordion col-12" id="paymentAccordionExample" aria-labelledby="headingSeven" data-parent="#paymentAccordion">
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingSeven" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+					Dodaj płatność
+					</button>
+
+					<div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#paymentAccordionExample">
+						<form class="card-body mx-auto" action="addPaymentMethod" method="post">      				
+							<div class="col-12">
+								<label class="formTitle" for="newPaymentMethod">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="newPaymentMethod" name="newPaymentMethod" value = "" required>
+							</div>
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+					Edytuj kategorię
+					</button>
+
+					<div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#paymentAccordionExample">
+						<form class="card-body mx-auto" action="editPaymentCategory" method="post">
+							<label class="formTitle">Edytuj kategorię:</label>
+
+							<select class="form-control col-12 borderDesign" name="paymentCategory" required>
+								<option title = "Kategoria" value="" disabled selected hidden> Metoda płatności </option>
+								{% for value in userPaymentMethods %}
+								<option value="{{value.name}}">{{value.name}}</option>                                
+								{% endfor %}
+							</select>
+
+							<div class="col-12">
+								<label class="formTitle" for="newPaymentMethod">Nowa kategoria:</label>
+								<input type="text" class="form-control borderDesign" id="newPaymentMethod" name="newPaymentMethod" value = "" required>
+							</div>
+
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+					Usuń kategorię 
+					</button>
+
+					<div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#paymentAccordionExample">
+						<form class="card-body mx-auto" action="deletePaymentCategory" method="post">
+							<label class="formTitle">Usuń kategorię:</label>	  				
+							<select class="form-control col-12 borderDesign" name="deletePaymentCategory" required>
+								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+								{% for value in userPaymentMethods %}
+								<option value="{{value.name}}"> {{value.name}}</option>                              
+								{% endfor %}
+							</select>
+
+							<div class="row d-flex justify-content-center py-4">
+								<div class="col-12 col-sm-1"></div>
+								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
+								<div class="col-12 col-sm-1"></div>
+							</div>
+						</form>	
+					</div>
+				</div>	
+		  	</div>
+
+		  	<div class="col-12 col-md-3"></div>
+		</div>
+	</div>		
+	<br>										
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function()
+{  
+
+    if ( document.location.href.indexOf('#personalData') > -1 ) 
+    {
+       $('#pills-personalData-tab').tab('show')
+    }
+    
+    else if ( document.location.href.indexOf('#addIncome') > -1 )
+    {
+    	$('#pills-income-tab').tab('show')
+       	$('#collapseOne').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#editIncome') > -1 )
+    {
+    	$('#pills-income-tab').tab('show')
+       	$('#collapseTwo').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#deleteIncome') > -1 )
+    {
+    	$('#pills-income-tab').tab('show')
+       	$('#collapseThree').collapse('show')
+    }
+
+    else if ( document.location.href.indexOf('#addExpense') > -1 )
+    {
+       $('#pills-expense-tab').tab('show')
+       $('#collapseFour').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#editExpense') > -1 )
+    {
+       $('#pills-expense-tab').tab('show')
+       $('#collapseFive').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#deleteExpense') > -1 )
+    {
+       $('#pills-expense-tab').tab('show')
+       $('#collapseSix').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#addPayment') > -1 )
+    {
+       $('#pills-payment-tab').tab('show')
+       $('#collapseSeven').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#editPayment') > -1 )
+    {
+       $('#pills-payment-tab').tab('show')
+       $('#collapseEight').collapse('show')
+    }
+    else if ( document.location.href.indexOf('#deletePayment') > -1 )
+    {
+       $('#pills-payment-tab').tab('show')
+       $('#collapseNine').collapse('show')
+    }
+});
+</script>
+
+<!--
+	$('.test span').append(urlAfterHash2);
+ var urlAfterHash =window.location.hash.substr(1);
+if ( document.location.href.indexOf(urlAfterHash) > -1 ) 
+    {
+    var urlAfterHash2 ="'#"+window.location.hash.substr(1)+"'";
+    
+       $(urlAfterHash2).tab('show')
+    }  
+
+    -->
+
+{% endblock %}
+
