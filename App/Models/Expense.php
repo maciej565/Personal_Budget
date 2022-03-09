@@ -107,14 +107,37 @@ class Expense extends \Core\Model
         return false;
     }
 
-    /*
-
-   
-
-    
-
-    public static function getUserExpenseCategoryId ( $user_id, $expenseCategoryName ) 
+    public static function checkExpenseCategoryExists($user_id, $oldExpenseCategoryName) 
     {
+        
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT * FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name =:name' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $oldExpenseCategoryName, PDO::PARAM_STR );
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+     public static function addNewExpenseCategory( $user_id, $newExpenseCategoryName)
+    {
+        $db = static::getDB();
+        
+        $stmt = $db->prepare('INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :user_id, :name)');
+        
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $newExpenseCategoryName, PDO::PARAM_STR );        
+        
+        return $stmt->execute();
+
+    }
+
+    public static function getEditedExpenseCategoryId( $user_id, $expenseCategoryName)
+    {
+
         $db = static::getDB();
         
         $stmt = $db->prepare( 'SELECT id FROM expenses_category_assigned_to_users WHERE name =:name AND user_id =:user_id ' );
@@ -127,92 +150,73 @@ class Expense extends \Core\Model
         return $stmt->fetchColumn();
     }
 
-   
-
-    
-
-    public static function getExpenses( $date, $user_id ) 
+    public static function editExpenseCategory( $user_id, $oldExpenseCategoryName, $newExpenseCategoryName )
     {
+        $categoryId = static::getEditedExpenseCategoryId($user_id, $oldExpenseCategoryName);
+        
+        $db = static::getDB();
+        
+        $stmt = $db->prepare( 'UPDATE expenses_category_assigned_to_users SET name = :name WHERE id = :id ' );
+
+        $stmt->bindValue( ':id', $categoryId, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $newExpenseCategoryName, PDO::PARAM_STR );        
+        
+        return $stmt->execute();    
+    }
+
+     public static function checkPaymentMethodExists($user_id, $oldPaymentMethod) 
+    {
+        
         $db = static::getDB();
 
-        $stmt = $db->prepare( 'SELECT amount, date_of_expense, expense_category_assigned_to_user_id, expense, inc.name FROM incomes, incomes_category_assigned_to_users AS inc WHERE incomes.date_of_income BETWEEN :first_date AND :second_date AND incomes.user_id = :user_id AND incomes.income_category_assigned_to_user_id = inc.id ORDER BY incomes.date_of_income ASC' );
+        $stmt = $db->prepare( 'SELECT * FROM payment_methods_assigned_to_users WHERE user_id = :user_id AND name =:name' );
 
-        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
         $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
-
+        $stmt->bindValue( ':name', $oldPaymentMethod, PDO::PARAM_STR );
         $stmt->setFetchMode( PDO::FETCH_ASSOC );
-
         $stmt->execute();
 
         return $stmt->fetchAll();
     }
 
-    public static function getIncomesTotal( $date, $user_id ) 
-    {
-        $db = static::getDB();
-
-        $stmt = $db->prepare( 'SELECT ROUND(SUM(incomes.amount), 2), inc.name FROM incomes, incomes_category_assigned_to_users AS inc WHERE incomes.date_of_income BETWEEN :first_date AND :second_date AND incomes.user_id = :user_id AND incomes.income_category_assigned_to_user_id = inc.id GROUP BY incomes.income_category_assigned_to_user_id');
-
-        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
-
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-
-        $stmt->execute();
-
-        return $stmt->fetchAll();
-    }
-
-
-   
-    
-
-    public static function getUserIncomesFromCategory ($user_id, $income_category_id) 
+     public static function addNewPaymentMethod( $user_id, $newPaymentMethod)
     {
         $db = static::getDB();
         
-        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE user_id = :user_id AND income_category_assigned_to_user_id =:income_category_id' );
+        $stmt = $db->prepare('INSERT INTO payment_methods_assigned_to_users VALUES (NULL, :user_id, :name)');
         
         $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
-        $stmt->bindValue( ':income_category_id', $income_category_id, PDO::PARAM_INT ); 
+        $stmt->bindValue( ':name', $newPaymentMethod, PDO::PARAM_STR );        
         
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-        $stmt->execute();
-        
-        return $stmt->fetchAll();
+        return $stmt->execute();
     }
 
-    public static function getSingleCategoryIncomes ($date, $user_id, $income_category_id) 
+    public static function getEditedPaymentMethodId( $user_id, $paymentMethod)
     {
-        $db = static::getDB();
 
-        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE user_id = :user_id AND income_category_assigned_to_user_id =:income_category_id AND date_of_income BETWEEN :first_date AND :second_date ORDER BY date_of_income DESC' );
+        $db = static::getDB();
         
+        $stmt = $db->prepare( 'SELECT id FROM payment_methods_assigned_to_users WHERE name =:name AND user_id =:user_id ' );
+
         $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
-        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':income_category_id', $income_category_id, PDO::PARAM_INT ); 
+        $stmt->bindValue( ':name', $paymentMethod, PDO::PARAM_STR );
         
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
         $stmt->execute();
-        
-        return $stmt->fetchAll();
+
+        return $stmt->fetchColumn();
     }
 
-    public static function getSingleIncomeData ($income_category_id) 
+    public static function editPaymentMethod( $user_id, $oldPaymentMethod, $newPaymentMethod )
     {
+        $categoryId = static::getEditedPaymentMethodId($user_id, $oldPaymentMethod);
+        
         $db = static::getDB();
+        
+        $stmt = $db->prepare( 'UPDATE payment_methods_assigned_to_users SET name = :name WHERE id = :id ' );
 
-        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE id = :id');
-
-        $stmt->bindValue( ':id', $income_category_id, PDO::PARAM_INT );
-
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-        $stmt->execute();
-
-        return $stmt->fetchAll();
+        $stmt->bindValue( ':id', $categoryId, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $newPaymentMethod, PDO::PARAM_STR );        
+        
+        return $stmt->execute();    
     }
-    */
 }
