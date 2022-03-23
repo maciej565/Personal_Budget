@@ -17,48 +17,75 @@ class Settings extends Authenticated
         $this->user = Auth::getUser();
     }
 
-    public function newAction($arg1='', $arg2='')
+    public function newAction($arg1='', $arg2='',$arg3='')
     {
-        $success = false; 
+        $success = false;
         
+
         $userIncomeCategories = Income::getUserIncomeCategories($this->user->id);
         $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
         $userPaymentMethods = Expense::getUserPaymentMethods($this->user->id);
         
 
-        View::renderTemplate('Settings/settings.html', 
-        [
-            'user' => $this->user,
-            'userIncomeCategories' => $userIncomeCategories,
-            'userExpenseCategories' => $userExpenseCategories,
-            'userPaymentMethods' => $userPaymentMethods,
-            'pass' => $arg1,
-            'error' => $arg2
-            
-        ] );
+            if(empty($arg3))
+            {
+                View::renderTemplate('Settings/settings.html', 
+                [
+                    'user' => $this->user,
+                    'userIncomeCategories' => $userIncomeCategories,                    
+                    'userExpenseCategories' => $userExpenseCategories,
+                    'userPaymentMethods' => $userPaymentMethods,
+                    'pass' => $arg1,
+                    'error' => $arg2,
+
+                ] );
+            }
+            else
+            {
+                
+
+                View::renderTemplate('Settings/settings.html', 
+                [
+                    'user' => $this->user,
+                    'userIncomeCategories' => $userIncomeCategories,
+                    'userExpenseCategories' => $userExpenseCategories,
+                    'userPaymentMethods' => $userPaymentMethods,
+                    'pass' => $arg1,
+                    'error' => $arg2,
+                    'active' => $arg3 
+                    
+                ] );
+                $arg3='';
+
+            }           
     }
+        
+    
+        
+    
 
     public function addIncomeCategoryAction()
     {
         
         $newIncomeCategory = $_POST['newIncomeCategory'] ;
+        $active ='';
 
         if ( Income::checkIncomeCategoryExists($this->user->id, $newIncomeCategory ) ) 
         {
-            $pass = '';
-            $error = "Podana kategoria już istnieje!";            
             
-            $this->redirect('/Settings/new#addIncome');
+            $pass = '';
+            $error = "Podana kategoria już istnieje!";
+            $active ='1';
+            $this -> newAction( $pass, $error, $active);                              
         }
 
         else
         {
             Income::addNewIncomeCategory($this->user->id, $newIncomeCategory);
             $pass = "Dodano nową kategorię!";
-            $error = '';            
-            
-            $this->redirect('/Settings/new#addIncome');
-
+            $error = '';
+            $active ='1';
+            $this -> newAction( $pass, $error, $active);
         }     
     }
 
@@ -66,41 +93,104 @@ class Settings extends Authenticated
     {
         $editedIncomeCategory = $_POST['editedIncomeCategory'];
         $oldIncomeCategoryName = $_POST['incomeCategory'];
+        $active ='';
         if ( Income::checkIncomeCategoryExists($this->user->id,$editedIncomeCategory))
-        {
+        {            
             $pass = '';
             $error = "Podana kategoria już istnieje!";
-            $this->redirect('/Settings/new#editIncome');            
-           
+            $active ='2';
+            $this -> newAction( $pass, $error, $active);            
         }
 
         else
         {
             Income::editIncomeCategory($this->user->id, $oldIncomeCategoryName, $editedIncomeCategory);
-            $pass = "Zmieniono nazwę kategorii na";
-            $error = '';            
-            $this->redirect('/Settings/new#editIncome'); 
+            $pass = "Pomyślnie zmieniono nazwę kategorii!";
+            $error = '';
+            $active ='2';
+            $this -> newAction( $pass, $error, $active); 
         }     
 
     }
 
+    public function chooseDeleteOptionAction()
+    {
+
+        $delete_option =  $_POST['delete_option'];
+        if ($delete_option=='1')
+        {
+            $this->redirect( '/Settings/deleteIncomesCategory');
+        }
+        else if ($delete_option=='2')
+        {
+            $this->redirect( '/Settings/moveIncomeCategoryRecords');
+        }
+        else if ($delete_option=='3')
+        {
+            $this->redirect( '/Settings/deleteExpensesCategory');
+        }
+        else if ($delete_option=='4')
+        {
+            $this->redirect( '/Settings/moveExpenseCategoryRecords');
+        }
+        else if ($delete_option=='5')
+        {
+            $this->redirect( '/Settings/deleteExpensesCategory');
+        }
+        else if ($delete_option=='6')
+        {
+            $this->redirect( '/Settings/moveExpenseCategoryRecords');
+        }
+    }
+
+    public function deleteIncomesCategoryAction()
+    {
+        $deletedIncomeCategory = $_POST['deletedIncomeCategory'];
+        Income::deleteIncomesFromUserIncomeCategory( $this->user->id, $deletedIncomeCategory );
+        Income::deleteIncomesCategory( $this->user->id, $deletedIncomeCategory );
+
+        $pass = "Kategoria została usunięta";
+        $error = '';
+        $active ='3';
+        $this -> newAction( $pass, $error, $active);
+    }
+
+    public function moveIncomesToDifferentCategoryAction()
+    {
+        $deletedIncomeCategory = $_POST['deletedIncomeCategory'];
+        $targetedIncomeCategory = $_POST['targetedIncomeCategory'];
+        Income::moveIncomesToDifferentCategory($this->user->id, $deletedIncomeCategory, $targetedIncomeCategory);
+        Income::deleteIncomesFromUserIncomeCategory( $this->user->id, $deletedIncomeCategory );
+        Income::deleteIncomesCategory( $this->user->id, $deletedIncomeCategory );
+        $pass = "Kategoria została usunięta";
+        $error = "Usunięta kategoria nie zawierała rekordów"; 
+        $active ='3';
+        $this -> newAction( $pass, $error, $active); 
+    }
+    
+
+
     public function addExpenseCategoryAction()
     {
         $newExpenseCategory = $_POST['newExpenseCategory'] ;
+        $active ='';
 
         if ( Expense::checkExpenseCategoryExists($this->user->id, $newExpenseCategory ) ) 
         {
             $pass = '';
-            $error = "Podana kategoria już istnieje!";            
-            $this->redirect('/Settings/new#addExpense'); 
+            $error = "Podana kategoria już istnieje!";
+            $active ='4';
+            $this -> newAction( $pass, $error, $active);           
+             
         }
 
         else
         {
             Expense::addNewExpenseCategory($this->user->id, $newExpenseCategory);
             $pass = "Dodano nową kategorię!";
-            $error = '';            
-            $this->redirect('/Settings/new#addExpense');
+            $error = '';
+            $active ='4';
+            $this -> newAction( $pass, $error, $active); 
         }     
     }
 
@@ -108,32 +198,79 @@ class Settings extends Authenticated
     {
         $editedExpenseCategory = $_POST['editedExpenseCategory'];
         $oldExpenseCategoryName = $_POST['oldExpenseCategoryName'];
+        $active ='';
+
         if ( Expense::checkExpenseCategoryExists($this->user->id,$editedExpenseCategory))
         {
             $pass = '';
             $error = "Podana kategoria już istnieje!";            
-            $this->redirect('/Settings/new#editExpense');
+            $active ='5';
+            $this -> newAction( $pass, $error, $active);
         }
 
         else
         {
             Expense::editExpenseCategory($this->user->id, $oldExpenseCategoryName, $editedExpenseCategory);
-            $pass = "Zmieniono nazwę kategorii na";
+            $pass = "Pomyślnie zmieniono nazwę kategorii";
             $error = '';            
-            $this->redirect('/Settings/new#editExpense');
+            $active ='5';
+            $this -> newAction( $pass, $error, $active);
         }     
 
+    }
+
+    public function deleteExpensesCategoryAction()
+    {
+        $deletedExpenseCategory = $_POST['deletedExpenseCategory'];
+        Expense::deleteExpensesFromUserExpenseCategory( $this->user->id, $deletedExpenseCategory );
+        Expense::deleteExpensesCategory( $this->user->id, $deletedExpenseCategory );
+
+        $pass = "Kategoria została usunięta";
+        $error = ''; 
+        $active ='6';
+        $this -> newAction( $pass, $error, $active); 
+    }
+
+    public function moveExpensesToDifferentCategoryAction()
+    {
+
+        $deletedExpenseCategory = $_POST['deletedExpenseCategory'];
+
+        $targetedExpenseCategory = $_POST['targetedExpenseCategory'];
+
+        
+        if (Expense::checkExpenseCategoryRecordsExists($this->user->id, $deletedExpenseCategory))
+        {
+	        Expense::moveExpensesToDifferentCategory($this->user->id, $deletedExpenseCategory, $targetedExpenseCategory);
+	        Expense::deleteExpensesFromUserExpenseCategory( $this->user->id, $deletedExpenseCategory );
+	        Expense::deleteExpensesCategory( $this->user->id, $deletedExpenseCategory );
+	        $pass = "Kategoria została usunięta";
+	        $error = ''; 
+	        $active ='6';
+	        $this -> newAction( $pass, $error, $active);
+        }
+        else
+        {
+        	Expense::deleteExpensesCategory( $this->user->id, $deletedExpenseCategory );
+        	$pass = "Kategoria została usunięta";
+	        $error = "Usunięta kategoria nie zawierała rekordów";  
+	        $active ='6';
+	        $this -> newAction( $pass, $error, $active);
+        }
+         
     }
 
     public function addPaymentMethodAction()
     {
         $newPaymentMethod = $_POST['newPaymentMethod'] ;
+        $active ='';
 
         if ( Expense::checkPaymentMethodExists($this->user->id, $newPaymentMethod ) ) 
         {
             $pass = '';
             $error = "Podana metoda płatności już istnieje!";            
-            $this->redirect('/Settings/new#addPayment');
+            $active ='7';
+            $this -> newAction( $pass, $error, $active);
         }
 
         else
@@ -141,7 +278,8 @@ class Settings extends Authenticated
             Expense::addNewPaymentMethod($this->user->id, $newPaymentMethod);  
             $pass = 'Dodano nową metodę płatności!';
             $error = '';            
-            $this->redirect('/Settings/new#addPayment');
+            $active ='7';
+            $this -> newAction( $pass, $error, $active);
         }     
     }
 
@@ -149,20 +287,61 @@ class Settings extends Authenticated
     {
         $editedPaymentMethod = $_POST['editedPaymentMethod'];
         $oldPaymentMethodName = $_POST['oldPaymentMethodName'];
+        $active ='';
+
         if ( Expense::checkPaymentMethodExists($this->user->id,$editedPaymentMethod))
         {
             $pass = '';
-            $error = "Podana kategoria już istnieje!";            
-            $this->redirect('/Settings/new#editPayment');
+            $error = "Podana metoda płatności już istnieje!";            
+            $active ='8';
+            $this -> newAction( $pass, $error, $active);
         }
 
         else
         {
             Expense::editPaymentMethod($this->user->id, $oldPaymentMethodName, $editedPaymentMethod);
-            $pass = "Zmieniono nazwę płatności na";
+            $pass = "Pomyślnie zmieniono metodę płatności";
             $error = '';            
-            $this->redirect('/Settings/new#editPayment');
+            $active ='8';
+            $this -> newAction( $pass, $error, $active);
         }     
 
+    }
+
+    public function deletePaymentMethodAction()
+    {
+        $deletedPaymentMethod = $_POST['deletedPaymentMethod'];
+        Expense::deletePaymentsFromUserPaymentCategory( $this->user->id, $deletedPaymentMethod );
+        Expense::deletePaymentMethod( $this->user->id, $deletedPaymentMethod );
+
+        $pass = "Metoda płatności została usunięta";
+        $error = ''; 
+        $active ='9';
+        $this -> newAction( $pass, $error, $active); 
+    }
+
+    public function movePaymentsToDifferentCategoryAction()
+    {
+        $deletedPaymentMethod = $_POST['deletedPaymentMethod'];
+        $targetedPaymentMethod = $_POST['targetedPaymentMethod'];
+
+        if (Expense::checkPaymentMethodRecordsExists($this->user->id, $deletedPaymentMethod))
+        {
+	        Expense::movePaymentsToDifferentCategory($this->user->id, $deletedPaymentMethod, $targetedPaymentMethod);
+        	Expense::deletePaymentsFromUserPaymentCategory( $this->user->id, $deletedPaymentMethod );
+        	Expense::deletePaymentMethod( $this->user->id, $deletedPaymentMethod );
+	        $pass = "Metoda płatności została usunięta";
+	        $error = ''; 
+	        $active ='9';
+	        $this -> newAction( $pass, $error, $active);
+        }
+        else
+        {
+        	Expense::deletePaymentMethod( $this->user->id, $deletedPaymentMethod );
+        	$pass = "Metoda płatności została usunięta.";
+	        $error = 'Metoda płatności nie zawierała żadnych rekordów.'; 
+	        $active ='9';
+	        $this -> newAction( $pass, $error, $active);
+        }
     }              
 }
