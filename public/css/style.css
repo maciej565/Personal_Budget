@@ -197,6 +197,7 @@ background-image:url("../img/bg.png");
 	font-weight:bold;
 }
 
+
 .dropdown-menu 
 {
 	color: #00C0E0;
@@ -209,6 +210,9 @@ background-image:url("../img/bg.png");
 	display: block;
 }
 
+
+
+
 .standardNavButtons
 {	
 	font-family: 'Oswald', sans-serif;
@@ -217,6 +221,7 @@ background-image:url("../img/bg.png");
 	font-size:20px;
 	color: white !important;	
 }
+
 
 .standardnavButtons:hover, .standardnavButtons:focus
 {
@@ -239,7 +244,9 @@ background-image:url("../img/bg.png");
 	border-color: #1073FF !important;
 }
 
-.standardButton:hover
+
+
+.standardButton:hover, .settingsList:hover
 {
 	background-color: transparent !important ;
 	color: #1073FF !important;
@@ -374,7 +381,7 @@ border-color: #1073FF !important;
 .error
 {
 	font-family: 'Oswald', sans-serif;
-	font-size:15px;		
+	font-size:18px;		
 	text-align:center;	
 	font-weight: bold;
 	color:red !important;
@@ -620,6 +627,7 @@ tbody.td
 	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
 	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
 }
+
 .tebleDesign
 {
 	width: 100%;
@@ -662,7 +670,44 @@ table.expenseTable td.expenseCell
 
 /*----------------------------------------------------------------ballance.html-------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------settings.html-------------------------------------------------------------------*/
+.settingsContainer
+{		
+	font-family: 'Oswald', sans-serif;
+	margin-top: 6vh;
+	margin-bottom: 10vh;
+	padding-top: 5vh;
+	padding-bottom: 5vh;
+	font-weight: bold;
+	border-radius: 45px;	
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+	-webkit-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	-moz-box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+	box-shadow: 10px 10px 26px -5px rgba(9,40,52,0.23);
+}
+.settingsTitle
+{
+	font-family: 'Oswald', sans-serif;
+	font-size:20px;
+	font-weight:bold;
+	text-align: center;
+}
 
+.settingsList
+{		
+	background-color: #1073FF !important ;
+	font-size:16px !important;
+	color: #FFFFFF !important;
+	letter-spacing: 2px;
+	padding: 15px 10px;
+	margin: 5px;
+	border-radius: 15px !important ;
+	border-width: 1px !important ;
+	border-color: #1073FF !important;
+}
+/*----------------------------------------------------------------settings.html-------------------------------------------------------------------*/
 
 
 

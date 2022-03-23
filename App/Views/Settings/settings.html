@@ -14,51 +14,57 @@
 	<div class="row settingsContainer col-12 col-sm-8 col-lg-6 col-xl-6 text-center d-flex justify-content-center">
 		<br>						
 		<div class="col-12 text-center">
-			<span class="card-title title">Ustawienia:</span>	
-			<div class="test"><p>The value is: <span></span></p></div>					
+			<span class="card-title title">Ustawienia</span>							
 			<hr>
-		</div>
 
-        <div class="col-md-12 nav nav-pills justify-content-center" id="pills-tab" role="tablist">
-        	<a href="#pills-personalData" class="nav-link active" id="pills-personalData-tab" data-toggle="pill" role="tab" aria-controls="pills-personalData" aria-selected="true">Dane osobowe</a>
-    		<a href="#pills-income" class="nav-link" id="pills-income-tab" data-toggle="pill" role="tab" aria-controls="pills-income" aria-selected="false">Przychody</a>
-    		<a href="#pills-expense" class="nav-link" id="pills-expense-tab" data-toggle="pill" role="tab" aria-controls="pills-expense" aria-selected="false">Wydatki</a>
-    		<a href="#pills-payment" class="nav-link" id="pills-payment-tab" data-toggle="pill"  role="tab" aria-controls="pills-payment" aria-selected="false">Płatności</a>
+		</div>
+		
+        <div class="col-md-12 nav nav-pills p-0 mt-2 " id="pills-tab" role="tablist">
+        	<a href="#pills-income" class="settingsTitle col-4 nav-link active" id="pills-income-tab" data-toggle="pill" role="tab" aria-controls="pills-income" aria-selected="true">Przychody</a>    		
+    		<a href="#pills-expense" class=" settingsTitle col-4  nav-link" id="pills-expense-tab" data-toggle="pill" role="tab" aria-controls="pills-expense" aria-selected="false">Wydatki</a>
+    		<a href="#pills-payment" class=" settingsTitle col-4 nav-link" id="pills-payment-tab" data-toggle="pill"  role="tab" aria-controls="pills-payment" aria-selected="false">Płatności</a>
         </div>
 
         <div class="row tab-content col-md-12">
-        	<div class="col-12 col-md-3"></div>
-
-	        <div id="pills-personalData" class="tab-pane fade show active col-12 col-md-6">
-	        Dane osobowe
-		  	</div>
-		  	
-		  	<div class="tab-pane fade col-12 col-md-6" id="pills-income">
+        	<div class="col-12 col-md-2"></div>
+	       		  	
+		  	<div class="tab-pane fade show active col-12 col-md-8 " id="pills-income">
 		  		<div class="accordion col-12" id="incomeAccordionExample" aria-labelledby="headingOne" data-parent="#incomeAccordion">
-		       		<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingOne" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		       		<button class="btn btn-link btn-block text-center collapsed settingsList my-3 " id="headingOne" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 		          	Dodaj kategorię
 		        	</button>
 
 		      		<div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#incomeAccordionExample">
 			        	<form class="card-body mx-auto" action="addIncomeCategory" method="post">      				
 							<div class="col-12">
-								<label class="formTitle" for="newIncomeCategory">Nowa kategoria:</label>
+								<label class="formTitle" for="newIncomeCategory">Nowa kategoria</label>
 								<input type="text" class="form-control borderDesign" id="newIncomeCategory" name="newIncomeCategory" value = "" required>
 							</div>
 							
 							<div class="d-flex justify-content-center py-4">
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
 							</div>
-						</form>	
+							 
+
+							{% if active==1 %}
+							{% if error is not empty %}                             
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}								
+							
+						</form>
+							
 					</div>
 
-	    			<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+	    			<button class="btn btn-link btn-block text-center collapsed settingsList my-3" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
 					Edytuj kategorię
 					</button>
 
 					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#incomeAccordionExample">
 			        	<form class="card-body mx-auto" action="editIncomeCategory" method="post"> 
-			        		<label class="formTitle">Edytuj kategorię:</label>
+			        		<label class="formTitle">Edytuj kategorię</label>
 
 							<select class="form-control col-12 borderDesign" name="incomeCategory" required>
 								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
@@ -68,48 +74,130 @@
 							</select>
 
 							<div class="col-12">
-								<label class="formTitle" for="editedIncomeCategory">Nowa kategoria:</label>
+								<label class="formTitle" for="editedIncomeCategory">Nowa kategoria</label>
 								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value = "" required>
 							</div>
 
 							<div class="d-flex justify-content-center py-4">
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
 							</div>
+							{% if active==2 %}
+							{% if error is not empty %}                              
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
 						</form>	
 			    	</div>
 
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
 					Usuń kategorię 
 					</button>
 
 					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#incomeAccordionExample">
-			        	<form class="card-body mx-auto" action="deleteIncomeCategory" method="post">
-			        		<label class="formTitle">Usuń kategorię:</label>	  				
-							<select class="form-control col-12 borderDesign" name="deleteIncomeCategory" required>
-								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
-								{% for value in userIncomeCategories %}
-	                        	<option value="{{value.name}}"> {{value.name}} </option>                              
-	                        	{% endfor %}
-							</select>
+			        	<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
+			        			  				
 
-							<div class="d-flex justify-content-center py-4">
-								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
+			        		<select class="form-control borderDesign text-left" id="delete_income_option" name="delete_option" autocomplete="off" required>  
+								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>			
+								<option value="1">Usuń kategorię z rekordami</option>
+	                            <option value="2">Przenieś wszystkie rekordy</option>                                                                                
+     						</select>
+     					</form>
+
+     					<div class="col-12">
+								<div class="modal fade" id="deleteIncomeModal1" tabindex="-1" role="dialog" aria-labelledby="deleteIncomeModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deleteIncomeModalId">Podaj kategorię którą chcesz usunąć</h5>
+											</div>
+											<form action="deleteIncomesCategory" method='post'>
+												<div class="modal-body">
+													<form action="getSingleIncomeRecords" method='post'>
+														<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" required>
+															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
+															{% for value in userIncomeCategories %}
+								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+								                        	{% endfor %}
+														</select>
+													</form>													
+													
+													
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
 							</div>
-						</form>	
+
+     						<div class="col-12">
+								<div class="modal fade" id="deleteIncomeModal2" tabindex="-1" role="dialog" aria-labelledby="deleteIncomeModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deleteIncomeModalId">Podaj kategorię którą chcesz usunąć</h5>
+											</div>
+											<form action="moveIncomesToDifferentCategory" method='post'>
+												<div class="modal-body">
+													<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
+														{% for value in userIncomeCategories %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+							                        	{% endfor %}
+													</select>
+													
+
+													<select class="form-control col-12 borderDesign" name="targetedIncomeCategory" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz gdzie ją przenieść</option>
+														{% for value in userIncomeCategories %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                       
+							                        	{% endfor %}
+													</select>
+
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
+							</div>
+
+							{% if active==3 %}
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>                           
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            {% if error is not empty %}
+                            <div class="error">{{error|join('<br/>')|raw}}</div> 
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
+							{% endif %}	
 			    	</div>
 				</div>
 			</div>
 
-			<div class="tab-pane fade col-12 col-md-6" id="pills-expense">
-		        <div class="accordion col-12" id="expenseAccordionExample" aria-labelledby="headingFour" data-parent="#expenseAccordion">
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingFour" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+			<div class="tab-pane fade col-12 col-md-8" id="pills-expense">
+		        <div class="accordion col-12 " id="expenseAccordionExample" aria-labelledby="headingFour" data-parent="#expenseAccordion">
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" id="headingFour" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
 					Dodaj kategorię
 					</button>
+				
 
 					<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#expenseAccordionExample">
 						<form class="card-body mx-auto" action="addExpenseCategory" method="post">      				
 							<div class="col-12">
-								<label class="formTitle" for="newExpenseCategory">Nowa kategoria:</label>
+								<label class="formTitle" for="newExpenseCategory">Nowa kategoria</label>
 								<input type="text" class="form-control borderDesign" id="newExpenseCategory" name="newExpenseCategory" value = "" required>
 							</div>
 							<div class="row d-flex justify-content-center py-4">
@@ -117,19 +205,29 @@
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
+							{% if active==4 %}
+							{% if error is not empty %}                             
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
 						</form>	
 					</div>
 
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+					
+
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
 					Edytuj kategorię
 					</button>
+					
 
 					<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#expenseAccordionExample">
 						<form class="card-body mx-auto" action="editExpenseCategory" method="post">
-							<label class="formTitle">Edytuj kategorię:</label>
+							<label class="formTitle">Edytuj kategorię</label>
 
 							<select class="form-control col-12 borderDesign" name="oldExpenseCategoryName" required>
-								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
 								{% for value in userExpenseCategories %}
 								<option value="{{value.name}}">{{value.name}}</option>                                
 								{% endfor %}
@@ -145,43 +243,125 @@
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
+							{% if active==5 %}
+							{% if error is not empty %}                            
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
 						</form>	
 					</div>
+					
 
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3 " type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
 					Usuń kategorię 
 					</button>
-
+					
 					<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#expenseAccordionExample">
-						<form class="card-body mx-auto" action="deleteExpenseCategory" method="post">
-							<label class="formTitle">Usuń kategorię:</label>	  				
-							<select class="form-control col-12 borderDesign" name="deleteExpenseCategory" required>
-								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
-								{% for value in userExpenseCategories %}
-								<option value="{{value.name}}"> {{value.name}} </option>                              
-								{% endfor %}
-							</select>
-
-							<div class="row d-flex justify-content-center py-4">
-								<div class="col-12 col-sm-1"></div>
-								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
-								<div class="col-12 col-sm-1"></div>
+						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
+			        		<select class="form-control borderDesign text-left" id="delete_expense_option" name="delete_option" autocomplete="off" required>
+								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
+								<option value="3">Usuń kategorię z rekordami</option>
+	                            <option value="4">Przenieś wszystkie rekordy</option>                                                                                
+     						</select>
+     					</form>
+						<div class="col-12">
+								<div class="modal fade" id="deleteExpenseModal1" tabindex="-1" role="dialog" aria-labelledby="deleteExpenseModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deleteExpenseModalId">Podaj kategorię którą chcesz usunąć</h5>
+											</div>
+											<form action="deleteExpensesCategory" method='post'>
+												<div class="modal-body">
+													<form action="getSingleExpenseRecords" method='post'>
+														<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" required>
+															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
+															{% for value in userExpenseCategories %}
+								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+								                        	{% endfor %}
+														</select>
+													</form>													
+													
+													
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
 							</div>
-						</form>	
+
+     						<div class="col-12">
+								<div class="modal fade" id="deleteExpenseModal2" tabindex="-1" role="dialog" aria-labelledby="deleteExpenseModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deleteExpenseModalId">Podaj kategorię którą chcesz usunąć</h5>
+											</div>
+											<form action="moveExpensesToDifferentCategory" method='post'>
+												<div class="modal-body">
+													<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
+														{% for value in userExpenseCategories %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+							                        	{% endfor %}
+													</select>
+													
+
+													<select class="form-control col-12 borderDesign" name="targetedExpenseCategory" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz gdzie ją przenieść</option>
+														{% for value in userExpenseCategories %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                       
+							                        	{% endfor %}
+													</select>
+
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
+							</div>
+
+							{% if active==6 %}
+
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+
+                            {% endif %}	
+							{% endif %}	
+							{% endif %}	
 					</div>
+
+					
+
 				</div>	
 		  	</div>
 
-		  	<div class="tab-pane fade col-12 col-md-6" id="pills-payment">
+		  	<div class="tab-pane fade col-12 col-md-8" id="pills-payment">
 		        <div class="accordion col-12" id="paymentAccordionExample" aria-labelledby="headingSeven" data-parent="#paymentAccordion">
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" id="headingSeven" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" id="headingSeven" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
 					Dodaj płatność
 					</button>
 
 					<div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#paymentAccordionExample">
 						<form class="card-body mx-auto" action="addPaymentMethod" method="post">      				
 							<div class="col-12">
-								<label class="formTitle" for="newPaymentMethod">Nowa kategoria:</label>
+								<label class="formTitle" for="newPaymentMethod">Nowa metoda płatności</label>
 								<input type="text" class="form-control borderDesign" id="newPaymentMethod" name="newPaymentMethod" value = "" required>
 							</div>
 							<div class="row d-flex justify-content-center py-4">
@@ -189,27 +369,34 @@
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
+							{% if active==7 %}
+							{% if error is not empty %}                           
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
 						</form>	
 					</div>
 
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-					Edytuj kategorię
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+					Edytuj metodę płatności
 					</button>
 
 					<div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#paymentAccordionExample">
-						<form class="card-body mx-auto" action="editPaymentCategory" method="post">
-							<label class="formTitle">Edytuj kategorię:</label>
+						<form class="card-body mx-auto" action="editPaymentMethod" method="post">
+							<label class="formTitle">Edytuj metodę płatności</label>
 
-							<select class="form-control col-12 borderDesign" name="paymentCategory" required>
+							<select class="form-control col-12 borderDesign" name="oldPaymentMethodName" required>
 								<option title = "Kategoria" value="" disabled selected hidden> Metoda płatności </option>
 								{% for value in userPaymentMethods %}
-								<option value="{{value.name}}">{{value.name}}</option>                                
+								<option value="{{value.name}}">{{value.name}}</option>                             
 								{% endfor %}
 							</select>
 
 							<div class="col-12">
-								<label class="formTitle" for="newPaymentMethod">Nowa kategoria:</label>
-								<input type="text" class="form-control borderDesign" id="newPaymentMethod" name="newPaymentMethod" value = "" required>
+								<label class="formTitle" for="editedPaymentMethod">Nowa metoda płatności</label>
+								<input type="text" class="form-control borderDesign" id="editedPaymentMethod" name="editedPaymentMethod" value = "" required>
 							</div>
 
 							<div class="row d-flex justify-content-center py-4">
@@ -217,37 +404,116 @@
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
+							{% if active==8 %}
+							{% if error is not empty %}                             
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+							{% endif %}
+							{% endif %}	
 						</form>	
 					</div>
 
-					<button class="btn btn-link btn-block text-center collapsed settingsList mt-2" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-					Usuń kategorię 
+					<button class="btn btn-link btn-block text-center collapsed settingsList my-3" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+					Usuń metodę płatności 
 					</button>
 
 					<div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#paymentAccordionExample">
-						<form class="card-body mx-auto" action="deletePaymentCategory" method="post">
-							<label class="formTitle">Usuń kategorię:</label>	  				
-							<select class="form-control col-12 borderDesign" name="deletePaymentCategory" required>
-								<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
-								{% for value in userPaymentMethods %}
-								<option value="{{value.name}}"> {{value.name}}</option>                              
-								{% endfor %}
-							</select>
-
-							<div class="row d-flex justify-content-center py-4">
-								<div class="col-12 col-sm-1"></div>
-								<button id="submitBtn" class="btn btn-danger col-12 col-sm-8" type="submit" value="Submit">Usuń</button>	
-								<div class="col-12 col-sm-1"></div>
+						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
+			        		<select class="form-control borderDesign text-left" id="delete_payment_option" name="delete_option" autocomplete="off" required>
+								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
+								<option value="5">Usuń metodę z rekordami</option>
+	                            <option value="6">Przenieś wszystkie metody</option>                                                                                
+     						</select>
+     					</form>
+						<div class="col-12">
+								<div class="modal fade" id="deletePaymentModal1" tabindex="-1" role="dialog" aria-labelledby="deletePaymentModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deletePaymentModalId">Podaj metodę płatności którą chcesz usunąć</h5>
+											</div>
+											<form action="deletePaymentMethod" method='post'>
+												<div class="modal-body">
+													<form action="getSinglePaymentRecords" method='post'>
+														<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" required>
+															<option title = "Kategoria" value="" disabled selected hidden>Wybierz metodę płatności</option>
+															{% for value in userPaymentMethods %}
+								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+								                        	{% endfor %}
+														</select>
+													</form>													
+													
+													
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
 							</div>
-						</form>	
-					</div>
-				</div>	
-		  	</div>
 
-		  	<div class="col-12 col-md-3"></div>
+     						<div class="col-12">
+								<div class="modal fade" id="deletePaymentModal2" tabindex="-1" role="dialog" aria-labelledby="deletePaymentModalId" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="deletePaymentModalId">Podaj metodę płatności którą chcesz usunąć</h5>
+											</div>
+											<form action="movePaymentsToDifferentCategory" method='post'>
+												<div class="modal-body">
+													<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz metodę płatności</option>
+														{% for value in userPaymentMethods %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                              
+							                        	{% endfor %}
+													</select>
+													
+
+													<select class="form-control col-12 borderDesign" name="targetedPaymentMethod" required>
+														<option title = "Kategoria" value="" disabled selected hidden>Wybierz gdzie ją przenieść</option>
+														{% for value in userPaymentMethods %}
+							                        	<option value="{{value.name}}"> {{value.name}} </option>                       
+							                        	{% endfor %}
+													</select>
+
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>	
+							</div>
+
+							{% if active==9 %}
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>                    
+                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+                            {% else %}
+                            {% if error is not empty %}
+                           	<div class="error">{{error|join('<br/>')|raw}}</div>
+                           	{% else %}
+                           	<div class="correct">{{pass|join('<br/>')|raw}}</div> 
+							{% endif %}
+							{% endif %}
+							{% endif %}
+					</div>
+				</div>
+
+		  	</div>
+		  	
+		  	<div class="col-12 col-md-2"></div>
+
 		</div>
-	</div>		
-	<br>										
+		</br>
+	</div>
+
 </div>
 
 {% endblock %}
@@ -262,66 +528,112 @@ $(document).ready(function()
        $('#pills-personalData-tab').tab('show')
     }
     
-    else if ( document.location.href.indexOf('#addIncome') > -1 )
+    else if ( document.location.href.indexOf('addIncome') > -1 )
     {
     	$('#pills-income-tab').tab('show')
        	$('#collapseOne').collapse('show')
     }
-    else if ( document.location.href.indexOf('#editIncome') > -1 )
+    else if ( document.location.href.indexOf('editIncome') > -1 )
     {
     	$('#pills-income-tab').tab('show')
        	$('#collapseTwo').collapse('show')
     }
-    else if ( document.location.href.indexOf('#deleteIncome') > -1 )
+    else if ( document.location.href.indexOf('moveIncomes') > -1 )
     {
     	$('#pills-income-tab').tab('show')
        	$('#collapseThree').collapse('show')
     }
+    else if ( document.location.href.indexOf('deleteIncomes') > -1 )
+    {
+       $('#pills-income-tab').tab('show')
+       $('#collapseThree').collapse('show')
+    }
 
-    else if ( document.location.href.indexOf('#addExpense') > -1 )
+    else if ( document.location.href.indexOf('addExpense') > -1 )
     {
        $('#pills-expense-tab').tab('show')
        $('#collapseFour').collapse('show')
     }
-    else if ( document.location.href.indexOf('#editExpense') > -1 )
+    else if ( document.location.href.indexOf('editExpense') > -1 )
     {
        $('#pills-expense-tab').tab('show')
        $('#collapseFive').collapse('show')
     }
-    else if ( document.location.href.indexOf('#deleteExpense') > -1 )
+    else if ( document.location.href.indexOf('moveExpenses') > -1 )
+    {
+    	$('#pills-expense-tab').tab('show')
+       	$('#collapseSix').collapse('show')
+    }
+    else if ( document.location.href.indexOf('deleteExpense') > -1 )
     {
        $('#pills-expense-tab').tab('show')
        $('#collapseSix').collapse('show')
     }
-    else if ( document.location.href.indexOf('#addPayment') > -1 )
+    else if ( document.location.href.indexOf('addPayment') > -1 )
     {
        $('#pills-payment-tab').tab('show')
        $('#collapseSeven').collapse('show')
     }
-    else if ( document.location.href.indexOf('#editPayment') > -1 )
+    else if ( document.location.href.indexOf('editPayment') > -1 )
     {
        $('#pills-payment-tab').tab('show')
        $('#collapseEight').collapse('show')
     }
-    else if ( document.location.href.indexOf('#deletePayment') > -1 )
+    else if ( document.location.href.indexOf('deletePayment') > -1 )
     {
        $('#pills-payment-tab').tab('show')
        $('#collapseNine').collapse('show')
     }
+    else if ( document.location.href.indexOf('movePayments') > -1 )
+    {
+    	$('#pills-payment-tab').tab('show')
+       	$('#collapseNine').collapse('show')
+    }
 });
 </script>
 
-<!--
-	$('.test span').append(urlAfterHash2);
- var urlAfterHash =window.location.hash.substr(1);
-if ( document.location.href.indexOf(urlAfterHash) > -1 ) 
+<script>
+	$(document).ready(function()
+	{
+    $('#delete_income_option').change(function() 
     {
-    var urlAfterHash2 ="'#"+window.location.hash.substr(1)+"'";
-    
-       $(urlAfterHash2).tab('show')
-    }  
+        var opval = $(this).val();
+        if(opval=="1")
+        {
+            $('#deleteIncomeModal1').modal("show");
+        }
+        else if(opval=="2")
+        {
+            $('#deleteIncomeModal2').modal("show");
+        }     
+    });
 
-    -->
+    $('#delete_expense_option').change(function() 
+    {
+        var opval = $(this).val();
+        if(opval=="3")
+        {
+            $('#deleteExpenseModal1').modal("show");
+        }
+        else if(opval=="4")
+        {
+            $('#deleteExpenseModal2').modal("show");
+        }
+    });
+
+    $('#delete_payment_option').change(function() 
+    {
+        var opval = $(this).val();
+        if(opval=="5")
+        {
+            $('#deletePaymentModal1').modal("show");
+        }
+        else if(opval=="6")
+        {
+            $('#deletePaymentModal2').modal("show");
+        }
+    });
+});
+</script>
 
 {% endblock %}
-
