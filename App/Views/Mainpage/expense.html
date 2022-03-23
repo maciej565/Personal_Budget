@@ -26,7 +26,7 @@
 							<label class="formTitle">Data:</label>
 							<input type="date" class="form-control borderDesign" name="date" type="date" value = "{% if expenses.date is defined %}{{expenses.date}}{% else %}{{currentDate}}{% endif %}" required>
 							{% if errors.dateError is not empty%}                            
-                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                          
+                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                         
                             {% endif %}
 						</div>
 					</div>
@@ -44,7 +44,7 @@
 							
 						<div class="col-12 col-md-6 py-1">
 							<label class="formTitle">Płatność:</label>
-							<select class="form-control borderDesign" name="payment_category" required>
+							<select class="form-control borderDesign" name="payment_method" required>
 							<option title = "Wybierz rodzaj płatności" value="" disabled selected hidden> Wybierz rodzaj płatności</option>
 							{% for value in userPaymentMethods %}
                             <option value="{{value.name}}">{{value.name}}</option>                                
