@@ -38,7 +38,7 @@ class Expense extends \Core\Model
 
 
    
-     public static function getUserPaymentMethods($id) 
+    public static function getUserPaymentMethods($id) 
     {
         $db = static::getDB();
 
@@ -68,6 +68,7 @@ class Expense extends \Core\Model
 
         return $categories['id'];
     }
+
 
      public function getUserPaymentMethodId($user_id) 
     {
@@ -397,4 +398,70 @@ class Expense extends \Core\Model
         }
         return true;
     }
+
+    public static function editSingleExpense($user_id, $expense_id, $expense_comment, $expense_amount, $date_of_expense, $expense_category) 
+    {
+        $db = static::getDB();
+
+        $expense_amount = str_replace( [','], ['.'], $expense_amount );
+        $expense_category_id = static::getUserExpenseCategoryId($expense_category, $user_id) ;
+
+        $stmt = $db->prepare( 'UPDATE expenses SET amount = :expense_amount, date_of_expense =:date_of_expense, expense_comment = :expense_comment, expense_category_assigned_to_user_id = :expense_category_id  WHERE id = :expense_id AND user_id = :user_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_id', $expense_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_category_id', $expense_category_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':date_of_expense', $date_of_expense, PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_amount', $expense_amount, PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_comment', $expense_comment, PDO::PARAM_STR);       
+
+
+        return $stmt->execute();
+    }
+
+    public static function getUserExpenseCategoryId($expense_category, $user_id) 
+    {
+        $sql = 'SELECT id, user_id, name FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :name';
+
+        $db = static::getDB();
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $expense_category, PDO::PARAM_STR );
+        $stmt->execute();
+
+        $categories = $stmt -> fetch();
+
+        return $categories['id'];
+    }
+
+     public static function getSingleExpenseCategoryId ($user_id, $expense_id, $categoryToMove)
+    {
+        $categoryId =                      
+        
+        $db = static::getDB();        
+        
+            
+        $stmt = $db->prepare('UPDATE expenses SET userExpenseCategoryId =:userExpenseCategoryId WHERE id = :id');
+        
+        $stmt->bindValue( ':id', $expenseId, PDO::PARAM_INT );
+        $stmt->bindValue( ':userExpenseCategoryId', $categoryId, PDO::PARAM_INT );             
+        
+    
+        return $stmt->execute();
+    }
+
+     public static function deleteSingleExpense ($user_id, $expense_id) 
+    {
+        $db = static::getDB(); 
+        
+        $stmt = $db->prepare('DELETE FROM expenses WHERE user_id = :user_id AND id = :expense_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_id', $expense_id, PDO::PARAM_INT );
+
+        return $stmt->execute();
+    } 
+
+
 }
