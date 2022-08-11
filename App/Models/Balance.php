@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use PDO;
 use \Core\View;
 use \App\Flash;
@@ -106,18 +107,29 @@ class balance extends \Core\Model
 		return $date;
     }
 
-    public static function getUserSelectedDate()
+    public static function getUserSelectedDate($arg1='',$arg2='')
     {
-		$date = ['first_date' => $_POST['first_date'],
-            'second_date' => $_POST['second_date']];
+       
+            
+            $date = 
+            [
+            'first_date' => isset($_POST['first_date']) ? $_POST['first_date']: '',
+            'second_date' => isset($_POST['second_date']) ? $_POST['second_date']: ''
+            ];
+
 
 		return $date;
     }
 
     public static function selectPeriod()
     {
-    	$date = ['first_date' => $_POST['first_date'],
-            'second_date' => $_POST['second_date']];
+    	
+        
+            $date = 
+            [
+            'first_date' => isset($_POST['first_date']) ? $_POST['first_date']: '',
+            'second_date' => isset($_POST['second_date']) ? $_POST['second_date']: ''
+            ];
 
 		return $date;  
     }

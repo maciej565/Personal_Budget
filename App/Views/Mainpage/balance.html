@@ -91,7 +91,7 @@
 								</thead>
 								<tbody>
 								{% for value in incomeBalanceTable %}
-								<tr id="{{value.income_category_assigned_to_user_id}}">
+								<tr id="{{value.id}}">
 									<td class="row-data-income" id="date_of_income">{{value.date_of_income}}</td>
 									<td class="row-data-income" id="income_category">{{value.name}}</td>									
 									<td class="row-data-income" id="income_value">{{value.amount}}</td>
@@ -141,7 +141,7 @@
 								
 								{% for value in expenseBalanceTable %}
 								
-								<tr id="{{value.expense_category_assigned_to_user_id}}">
+								<tr id="{{value.id}}">
 									
 									<td class="row-data-expense" id="date_of_expense">{{value.date_of_expense}}</td>
 									<td class="row-data-expense" id="expense_category">{{value.name}}</td>									
@@ -232,7 +232,7 @@
 										</form>	
 									</div>		
 									<br>		
-									<div class="col-sm-2 col-lg-3 col-xl-3 "></div>	
+									<div class="col-sm-2 col-lg-3 col-xl-3 "></div>
 								</div>
 							</div>
 						</div>
@@ -581,16 +581,19 @@
 
 <script>
 	$(document).ready(function()
+
 	{
     $('#option_number').change(function() 
     {
+    	var clicked_date = document.getElementById("option_number").value;
         var opval = $(this).val();
         if(opval=="4")
         {
             $('#balanceModal').modal("show");
+            document.getElementById("option_number").value = 1 ;
         }
     });
-});
+});   
 </script>
 
 

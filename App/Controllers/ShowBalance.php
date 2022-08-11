@@ -30,6 +30,7 @@ class showBalance extends Authenticated
         {
             $this->redirect( '/showBalance/lastMonth');
         }
+        
         else if ($option_number=='3')
         {
             $this->redirect( '/showBalance/currentYear');
@@ -156,8 +157,12 @@ class showBalance extends Authenticated
 
     public function selectedDateAction($arg1='', $arg2='')
     {
+                
+        
         $success = false; 
-        $date = Balance::getUserSelectedDate();        
+        $date = Balance::getUserSelectedDate();
+        $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
+        $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);       
         $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
         $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
         $balance = Balance::getBalance($date,$this->user->id);
@@ -165,12 +170,15 @@ class showBalance extends Authenticated
         $percentageExpense = Balance::percentageExpense($date,$this->user->id);
         $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
         $expenseDataPoints = Balance::getExpenses($date,$this->user->id); 
-        $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id); 
-        
+        $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id);
+       
 
         View::renderTemplate('Mainpage/balance.html', 
         [
-            'user' => $this->user,
+
+            'user' => $this->user,            
+            'userExpenseCategories' => $userExpenseCategories,
+            'userPaymentMethods' => $userPaymentMethods,
             'incomeBalanceTable' => $incomeBalanceTable,
             'userIncomeCategories' => $userIncomeCategories,
             'expenseBalanceTable' => $expenseBalanceTable,
@@ -187,6 +195,7 @@ class showBalance extends Authenticated
             'error' => $arg2
             
         ] );
+
     }   
 
     
@@ -211,8 +220,6 @@ class showBalance extends Authenticated
         $lastMonthdate = Balance::getLastMonthDate();
 
 
-            
-               
                 
                 if (Expense::editSingleExpense($this->user->id, $expense_id, $expense_comment, $expense_amount, $date_of_expense, $expense_category))
                 {
@@ -250,8 +257,7 @@ class showBalance extends Authenticated
 
 
     protected function editSingleIncomeAction() 
-    {
-        
+    {        
         $income_id = $_POST['modal_income_id'];        
         $income_amount = $_POST['modal_income_value'];
         $date_of_income = $_POST['modal_date_of_income'];
@@ -262,14 +268,10 @@ class showBalance extends Authenticated
         'second_date' => $_POST['income_second_date']];
         $currentMonthDate = Balance::getCurrentMonthDate();
         $currentYearDate = Balance::getCurrentYearDate();
-        $lastMonthdate = Balance::getLastMonthDate();
-
-
-            
+        $lastMonthdate = Balance::getLastMonthDate();        
                
         
         if (Income::editSingleIncome($this->user->id, $income_id, $income_comment, $income_amount, $date_of_income, $income_category))
-
         {
             if ($date === $currentMonthDate) 
             {
@@ -296,28 +298,19 @@ class showBalance extends Authenticated
             $message = '';
             $error = "Niestety nie udało się zmienić przychodu";
             $this -> currentMonthAction($message, $error);
-        }
-
-              
-
+        }          
     }
 
     protected function deleteSingleIncomeAction() 
-    {
-        
+    {        
         $income_id = $_POST['deleted_income_id'];      
         $date = ['first_date' => $_POST['income_first_date'],
         'second_date' => $_POST['income_second_date']];
         $currentMonthDate = Balance::getCurrentMonthDate();
         $currentYearDate = Balance::getCurrentYearDate();
         $lastMonthdate = Balance::getLastMonthDate();
-
-
-            
-               
         
         if (Income::deleteSingleIncome($this->user->id, $income_id))
-
         {
             if ($date === $currentMonthDate) 
             {
@@ -344,9 +337,7 @@ class showBalance extends Authenticated
             $message = '';
             $error = "Niestety nie udało się usunąć przychodu";
             $this -> currentMonthAction($message, $error);
-        }
-
-              
+        }           
 
     }
      protected function deleteSingleExpenseAction() 
@@ -391,14 +382,8 @@ class showBalance extends Authenticated
             $message = '';
             $error = "Niestety nie udało się usunąć wydatku";
             $this -> currentMonthAction($message, $error);
-        }
-
-              
+        }             
 
     }
-
-
-
-
 
 }
