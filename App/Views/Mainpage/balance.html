@@ -63,28 +63,41 @@
 		<hr>
 		
 
-			<div class="row d-flex justify-content-center">
-			
+		<div class="row d-flex justify-content-center">			
 			<div class="col-12 col-lg-10 py-1">	
 				<div class="form-group col-12">									
 					<div class="row d-flex justify-content-center">
+						{% if success == true %}
+			<div class="py-3">
+				<span style="color: green; font-size:20px;">{{success}}</span>													
+			</div>	
+		{% endif %}							
+		
+		{% if error == true %}
+			<div class="py-3">
+				<span style="color: red; font-size:20px;">{{error}}</span>													
+			</div>							
+		{% endif %}
 						<label class="balanceTitle col-12"><i class="fas fa-euro-sign pr-2" style="color:green;"></i>Przychody:</label>
 						<div class="col-12 col-xl-10 py-1 tebleDesign">
 							<table class="table incomeTable text-center" id="incomeTable">
 								<thead>
 									<tr>       
-										<th scope="col">   
+										<th scope="col" class="col-2 ">   
 											Data
 										</th>
-										<th scope="col">
+										<th scope="col" class="col-2 ">
 											Kategoria
 										</th>
 										
-										<th scope="col">   
+										<th scope="col" class="col-2 ">   
 											Kwota
 										</th>
-										<th scope="col">   
+										<th scope="col" class="col-2 ">   
 											Komentarz
+										</th>
+										<th scope="col" class="col-2 ">   
+											Edytuj/Usuń
 										</th>
 											
 									</tr>
@@ -111,29 +124,36 @@
 						</div>
 					</div>
 				</div>
-			</div>				
-		
-			<div class="col-12 py-1">	
+			</div>			
+			
+					
+			<div class="col-12 col-lg-10 py-1">	
 				<div class="form-group col-12">									
 					<div class="row d-flex justify-content-center">							
-					<label class="balanceTitle col-12"><i class="fas fa-credit-card pr-2" style="color:red;"></i>Wydatki:</label>
-						<div class="col-12 col-xl-10 py-1 tebleDesign">
+						<label class="balanceTitle col-12"><i class="fas fa-credit-card pr-2" style="color:red;"></i>Wydatki:</label>
+						<div class="col-12 col-xl-10 py-1">
 							<table class="table expenseTable" id="expenseTable">
 								<thead>
-									<tr>       
-										<th scope="col">
+									<tr>									     
+										<th scope="col" class="col-2">
 											Data
 										</th>
-										<th scope="col">
+										<th scope="col" class="col-2">
+											Kwota
+										</th>
+										<th scope="col" class="col-2">
 											Kategoria
 										</th>																			
 
-										<th scope="col">   
-											Kwota
+										<th scope="col" class="col-2">   
+											Płatność
 										</th>
-										<th scope="col">   
+										<th scope="col" class="col-2 ">   
 											Komentarz
 										</th>
+										<th scope="col" class="col-2 ">   
+											Edytuj/Usuń
+										</th>										  
 									</tr>
 								</thead>
 
@@ -144,206 +164,187 @@
 								<tr id="{{value.id}}">
 									
 									<td class="row-data-expense" id="date_of_expense">{{value.date_of_expense}}</td>
-									<td class="row-data-expense" id="expense_category">{{value.name}}</td>									
 									<td class="row-data-expense" id="expense_value">{{value.amount}}</td>
+									<td class="row-data-expense" id="expense_category">{{value.expense_name}}</td>									
+									<td class="row-data-expense" id="payment_category">{{value.payment_name}}</td>				
+									
 									<td class="row-data-expense" id="expense_comment">{{value.expense_comment}}</td>
 									<td class="row-data-expense" id="expense_id" hidden>{{value.id}} </td>
 									<td><button type="button" onclick="showEditedExpense()" data-toggle="modal" data-target='#edit_expense'  class="btn fas fa-edit "></button>
 										<button class=" btn fas fa-ban col-3" style='color:red;' onclick="showDeleteExpense()" data-toggle="modal" data-target='#delete_expense' style='color:red;' ></button></td>		
 								
-									</tr>
+								</tr>
 
 								{% endfor %}
 								</tbody>
+						</div>
+					</div>
+				</div>
+			</div>			
 
 								<div class="modal fade col-12" id="edit_income" tabindex="-1" aria-labelledby="edit_income" role="dialog" aria-hidden="true">                
 						            <div class="modal-dialog modal-lg modal-dialog-centered modal-notify modal-info addIncomeContainer">
 						                <div class="modal-content text-center">
 						                	<span class="card-title title">Edytuj przychód</span>
 						                    <div class="modal-header text-center d-flex justify-content-center">
-
-						                    	
-
-						                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						                        
+						                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                     
 						                    </div>
 						                    <div class="modal-body">
+						                    	<div class="row">									
+													<div class=" col-12 text-center">
+														<form class="card-body mx-auto" action="editSingleIncome" method="post" >									
+														
+														
 
-						                    <div class="row">
-									
-									<div class=" col-12 text-center">
-										<form class="card-body mx-auto" action="editSingleIncome" method="post" >
-											
-											
-											<div class="row">					
-												<div class="col-12 col-md-6 py-1">								
-													<label class="formTitle" for="amount">Kwota:</label>									
-													<input type="number" class="form-control borderDesign"  step="0.01" placeholder="0.00" min="0.01" max="999999.99" id="modal_income_value" name="modal_income_value" value = "" autocomplete="off" required>
-													{% if errors.amountError is not empty%}                            
-						                            <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                          
-						                            {% endif %}	
-												</div>
-												
-												<div class="col-12 col-md-6 py-1 ">								
-													<label class="formTitle">Data:</label>
-													<input type="date" class="form-control borderDesign" id="modal_date_of_income" name="modal_date_of_income" type="date" value = "" required>
+														<input class="form-control" value = "{{first_date}}" name="first_date" id="first_date" type='date' hidden>
+														<input class="form-control" value = "{{second_date}}" name="second_date" id="second_date" type='date' hidden>
+														
+															
+															<div class="row">					
+																<div class="col-12 col-md-6 py-1">								
+																	<label class="formTitle" for="amount">Kwota:</label>									
+																	<input type="number" class="form-control borderDesign"  step="0.01" placeholder="0.00" min="0.01" max="999999.99" id="modal_income_value" name="modal_income_value" value = "" autocomplete="off" required>
+																	{% if errors.amountError is not empty%}                            
+										                            <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                          
+										                            {% endif %}	
+																</div>
+																
+																<div class="col-12 col-md-6 py-1 ">								
+																	<label class="formTitle">Data:</label>
+																	<input type="date" class="form-control borderDesign" id="modal_date_of_income" name="modal_date_of_income" type="date" value = "" required>
 
-						                            {% if errors.dateError is not empty%}                            
-						                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                            
-						                            {% endif %}
-												</div>
-											</div>
-											
-											<div class="row">
-												<div class="col-12 col-md-6 py-1">								
-													<label class="formTitle">Kategoria:</label>	
+										                            {% if errors.dateError is not empty%}                            
+										                            <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                            
+										                            {% endif %}
+																</div>
+															</div>
+															
+															<div class="row">
+																<div class="col-12 col-md-6 py-1">								
+																	<label class="formTitle">Kategoria:</label>	
 
-													<select class="form-control col-12 borderDesign" id="modal_income_category" name="modal_income_category" required>
-													<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
-													{% for value in userIncomeCategories %}
-						                            <option value="{{value.name}}"> {{value.name}} </option>                                
-						                            {% endfor %}
-													</select>
-												</div>
-												
-												<div class="col-12 col-md-6 py-1">
-													<label class="formTitle" for="comment">Dodaj komentarz</label>
-													<div class="d-sm-block ">
-														<textarea class="form-control borderDesign" rows="1" id="modal_income_comment"  placeholder="Dodaj komentarz..."  name = "modal_income_comment"></textarea>
+																	<select class="form-control col-12 borderDesign" id="modal_income_category" name="modal_income_category" required>
+																	<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
+																	{% for value in userIncomeCategories %}
+										                            <option value="{{value.name}}"> {{value.name}} </option>                                
+										                            {% endfor %}
+																	</select>
+																</div>
+																
+																<div class="col-12 col-md-6 py-1">
+																	<label class="formTitle" for="comment">Dodaj komentarz</label>
+																	<div class="d-sm-block ">
+																		<textarea class="form-control borderDesign" rows="1" id="modal_income_comment"  placeholder="Dodaj komentarz..."  name = "modal_income_comment"></textarea>
+																	</div>		
+																</div>
+																<input name = "modal_income_id" class="row-data" id="modal_income_id" hidden>
+																<input name = "income_first_date"  value="{{first_date}}" id="income_first_date" hidden>	
+																<input name = "income_second_date" value="{{second_date}}" id="income_second_date" hidden>
+															</div>
+																				
+															<div class="row d-flex justify-content-center py-4">
+																<div class="col-12 col-sm-1"></div>
+																<button id="submitBtn" class="btn btn-success col-8 col-sm-4" type="submit" value="Submit">Edytuj</button>	
+																<div class="col-12 col-sm-2"></div>
+																<br>
+																<button class="btn btn-danger col-8 col-sm-4" type="reset" value="Reset">Anuluj</button>
+																<div class="col-12 col-sm-1"></div>
+																
+															</div>
+															<br>													
+														</form>	
 													</div>		
+													<br>		
+													<div class="col-sm-2 col-lg-3 col-xl-3 "></div>
 												</div>
-												<input name = "modal_income_id" class="row-data" id="modal_income_id" hidden>
-												<input name = "income_first_date"  value="{{first_date}}" id="income_first_date" hidden>	
-												<input name = "income_second_date" value="{{second_date}}" id="income_second_date" hidden>
 											</div>
-																
-											<div class="row d-flex justify-content-center py-4">
-												<div class="col-12 col-sm-1"></div>
-												<button id="submitBtn" class="btn btn-success col-8 col-sm-4" type="submit" value="Submit">Edytuj</button>	
-												<div class="col-12 col-sm-2"></div>
-												<br>
-												<button class="btn btn-danger col-8 col-sm-4" type="reset" value="Reset">Anuluj</button>
-												<div class="col-12 col-sm-1"></div>
-												
-											</div>
-											<br>
-											
-														
-										</form>	
-									</div>		
-									<br>		
-									<div class="col-sm-2 col-lg-3 col-xl-3 "></div>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 									
 								
 
-								<div class="modal fade col-12" id="delete_income" tabindex="-1" aria-labelledby="delete_income" role="dialog" aria-hidden="true">                
+								<div class="modal fade col-12" id="delete_income" tabindex="-1" aria-labelledby="delete_income" role="dialog" aria-hidden="true">
+						            <div class="modal-dialog modal-lg modal-dialog-centered modal-notify modal-info">
+						                <div class="row modal-content text-center">
+						                	<div class="d-flex justify-content-between align-items-center">
+						                		<div class="col-3"></div>
+							                	<span class="card-title title col-6">Usuń przychód</span>
+							                    <div class="modal-header text-center d-flex justify-content-center col-3">
+							        				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                   
+							                    </div>
+						                	</div>
+						                    <div class="modal-body">						                    	
+					                    		<div class="row col-12 d-flex justify-content-center text-center">
+													<form class="card-body mx-auto" action="deleteSingleIncome" method="post">
+														<input class="form-control" value = "{{first_date}}" name="first_date" id="first_date" type='date' hidden>
+														<input class="form-control" value = "{{second_date}}" name="second_date" id="second_date" type='date' hidden>
+														<div class="col-12">
+														<span>Czy na pewno chcesz usunąć przychód?</span>
+													</div>
+														
+														<div class=col-12>
+														<input name = "deleted_income_id" class="row-data" id="delete_modal_income_id" hidden>
+														<input name = "income_first_date"  value="{{first_date}}" id="income_first_date" hidden>	
+														<input name = "income_second_date" value="{{second_date}}" id="income_second_date" hidden>
+														</div>
+														
+																			
+														<div class="row d-flex justify-content-center py-4 ">
+															<div class="col-12 col-sm-1 "></div>
+															<button id="submitBtn" class="btn btn-danger col-12 col-sm-4 " type="submit" value="Submit">Usuń</button>	
+															<div class="col-12 col-sm-2"></div>
+															<br>															
+															<button type="button" class="btn btn-success col-12 col-sm-4" data-dismiss="modal" aria-hidden="true">Anuluj</button>
+															<div class="col-12 col-sm-1"></div>															
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="modal fade col-12" id="delete_expense" tabindex="-1" aria-labelledby="delete_expense" role="dialog" aria-hidden="true">     
 						            <div class="modal-dialog modal-lg modal-dialog-centered modal-notify modal-info">
 						                <div class="modal-content text-center">
-						                	<span class="card-title title">Usuń przychód</span>
-						                    <div class="modal-header text-center d-flex justify-content-center">
-						        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						                        
-						                    </div>
-						                    <div class="modal-body">
-
-						                    <div class="row">
-
-									
-									<div class="row col-12 d-flex justify-content-center text-center">
-										<form class="card-body mx-auto" action="deleteSingleIncome" method="post">
-											<div class="col-12">
-											<span>Czy na pewno chcesz usunąć przychód?</span>
+						                	<div class="d-flex justify-content-between align-items-center">
+						                		<div class="col-3"></div>
+							                	<span class="card-title title col-6">Usuń wydatek</span>
+							                    <div class="modal-header col-3">
+						        					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                       
+						                    	</div>
+						                	</div>
+						                    <div class="modal-body d-flex justify-content-center align-items-center">
+												<div class="row col-12 d-flex justify-content-center text-center">
+													<form class="card-body mx-auto" action="deleteSingleExpense" method="post">
+														<div class="col-12">
+															<span>Czy na pewno chcesz usunąć wydatek?</span>
+														</div>
+														
+														<div class=col-12>
+															<input name = "deleted_expense_id" class="row-data" id="delete_modal_expense_id" hidden>
+															<input name = "expense_first_date"  value="{{first_date}}" id="expense_first_date" hidden>	
+															<input name = "expense_second_date" value="{{second_date}}" id="expense_second_date" hidden>
+														</div>											
+																			
+														<div class="row d-flex justify-content-center py-4 ">
+															<div class="col-12 col-sm-1 "></div>
+															<button id="submitBtn" class="btn btn-danger col-12 col-sm-4 " type="submit" value="Submit">Usuń</button>	
+															<div class="col-12 col-sm-2"></div>
+															<br>
+															
+															<button type="button" class="btn btn-success col-12 col-sm-4" data-dismiss="modal" aria-hidden="true">Anuluj</button>
+															<div class="col-12 col-sm-1"></div>												
+														</div>
+													</form>
+												</div>												
+											</div>
 										</div>
-											
-											<div class=col-12>
-											<input name = "deleted_income_id" class="row-data" id="delete_modal_income_id" hidden>
-											<input name = "income_first_date"  value="{{first_date}}" id="income_first_date" hidden>	
-											<input name = "income_second_date" value="{{second_date}}" id="income_second_date" hidden>
-											</div>
-											
-																
-											<div class="row d-flex justify-content-center py-4 ">
-												<div class="col-12 col-sm-1 "></div>
-												<button id="submitBtn" class="btn btn-danger col-12 col-sm-4 " type="submit" value="Submit">Usuń</button>	
-												<div class="col-12 col-sm-2"></div>
-												<br>
-												
-												<button type="button" class="btn btn-success col-12 col-sm-4" data-dismiss="modal" aria-hidden="true">Anuluj</button>
-												<div class="col-12 col-sm-1"></div>
-												
-											</div>
-										</form>
-									</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
 
-					<div class="modal fade col-12" id="delete_expense" tabindex="-1" aria-labelledby="delete_expense" role="dialog" aria-hidden="true">                
-						            <div class="modal-dialog modal-lg modal-dialog-centered modal-notify modal-info">
-						                <div class="modal-content text-center">
-						                	<span class="card-title title">Usuń wydatek</span>
-						                    <div class="modal-header text-center d-flex justify-content-center">
-						        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						                        
-						                    </div>
-						                    <div class="modal-body">
-
-						                    <div class="row">
-
-									
-									<div class="row col-12 d-flex justify-content-center text-center">
-										<form class="card-body mx-auto" action="deleteSingleExpense" method="post">
-											<div class="col-12">
-											<span>Czy na pewno chcesz usunąć wydatek?</span>
-										</div>
-											
-											<div class=col-12>
-											<input name = "deleted_expense_id" class="row-data" id="delete_modal_expense_id" hidden>
-											<input name = "expense_first_date"  value="{{first_date}}" id="expense_first_date" hidden>	
-											<input name = "expense_second_date" value="{{second_date}}" id="expense_second_date" hidden>
-											</div>
-											
-																
-											<div class="row d-flex justify-content-center py-4 ">
-												<div class="col-12 col-sm-1 "></div>
-												<button id="submitBtn" class="btn btn-danger col-12 col-sm-4 " type="submit" value="Submit">Usuń</button>	
-												<div class="col-12 col-sm-2"></div>
-												<br>
-												
-												<button type="button" class="btn btn-success col-12 col-sm-4" data-dismiss="modal" aria-hidden="true">Anuluj</button>
-												<div class="col-12 col-sm-1"></div>
-												
-											</div>
-										</form>
-									</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
-
-
-
-
-																											
-														
-														
-														
-														
-														
-																	
-								
-								
-								<div class="modal fade col-12" id="edit_expense" tabindex="-1" aria-labelledby="edit_expense" role="dialog" aria-hidden="true">                
+								<div class="modal fade col-12" id="edit_expense" tabindex="-1" aria-labelledby="edit_expense" role="dialog" aria-hidden="true">               
 						            <div class="modal-dialog modal-lg modal-dialog-centered modal-notify modal-info addExpenseContainer">
 						                <div class="modal-content text-center">
 						                	<span class="card-title title">Edytuj wydatek</span>
@@ -353,11 +354,9 @@
 						                    </div>
 						                   
 						                    <div class="modal-body">
-
 												<div class="col-12 text-center">
 													<form class="card-body mx-auto" action="editSingleExpense" method="post">
-																											
-														
+														<input type="hidden" name="first_selected_date">									
 														<div class="row">											
 															<div class="col-12 col-md-6 py-1">								
 																<label class="formTitle" for="modal_expense_value">Kwota:</label>						
@@ -366,8 +365,6 @@
 									                            <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                         
 									                            {% endif %}	
 															</div>
-															
-															<!-- expense_date -->
 															<div class="col-12 col-md-6 py-1 ">								
 																<label class="formTitle">Data:</label>
 																<input type="date" class="form-control borderDesign" id="modal_date_of_expense" name="modal_date_of_expense" type="date" value ="" required>
@@ -386,12 +383,11 @@
 									                            <option value="{{value.name}}"> {{value.name}}</option>                                
 									                            {% endfor %}
 																</select>
-															</div>	
-																
+															</div>																
 															<div class="col-12 col-md-6 py-1">
 																<label class="formTitle">Płatność:</label>
-																<select class="form-control borderDesign"   id="modal_expense_payment_method" name="modal_expense_payment_method" required>
-																<option title = "Wybierz rodzaj płatności" id="modal_expense_payment_method" disabled selected hidden> Wybierz rodzaj płatności</option>
+																<select class="form-control borderDesign"   id="modal_payment_category" name="modal_payment_category" required>
+																<option title = "Wybierz rodzaj płatności" id="modal_payment_category" disabled selected hidden> Wybierz rodzaj płatności</option>
 																{% for value in userPaymentMethods %}
 									                            <option value="{{value.name}}">{{value.name}}</option>                                
 									                            {% endfor %}	
@@ -404,17 +400,14 @@
 																	<input name = "expense_first_date"  value="{{first_date}}" id="expense_first_date" hidden>	
 																	<input name = "expense_second_date" value="{{second_date}}" id="expense_second_date" hidden>												
 
-															</div>	
-
+															</div>
 															<div class="row col-12 d-flex justify-content-center py-4">
 																<div class="col-12 col-sm-1"></div>
 																<button id="submitBtn" class="btn btn-success col-8 col-sm-4" type="submit" value="Submit">Edytuj</button>	
 																<div class="col-12 col-sm-2"></div>
 																<br>
 																<button class="btn btn-danger col-8 col-sm-4" type="reset" value="Reset">Anuluj</button>
-																<div class="col-12 col-sm-1"></div>
-																					
-																
+																<div class="col-12 col-sm-1"></div>	
 															</div>
 															<br>
 														</div>
@@ -424,142 +417,129 @@
 										</div>
 									</div>										
 								</div>
+							</table>
 						</div>
 					</div>
 				</div>
-			</div>
-		
+			</div>		
 		</div>
-	</table>
-	{% if success == true %}
-			<div class="py-3">
-			<span style="color: green; font-size:20px;">{{succes}}</span>													
-			</div>							
-	{% endif %}
-	{% if error == true %}
-			<div class="py-3">
-			<span style="color: red; font-size:20px;">{{error}}</span>													
-			</div>							
-	{% endif %}
+	
 
-
-
-</div>
-</div>
-
-			
-			
-		
-		
-
-			<div class="col-12 d-flex justify-content-center">
-				<div class="col-8 progressBar">
-					<div class="balanceTitle"><i class="fas fa-chart-bar pr-1" style=" font-size: 60px;"></i>
-						<br>	
-						<span class="">Twój bilans {{balanceTitle}}:</span>
-						<br>
-							{% if balance>0 %}										
-								<span style='color:green;'>{{balance}} zł</span>
-							{%  elseif balance<0 %}
-								<span style='color:red;'>{{balance}} zł</span>										
-							{% else %}									
-								<span>{{balance}}zł<br>Brak przychodów oraz wydatków w danym okresie</span>
-							{% endif %}
-					</div>
+		<div class="col-12 d-flex justify-content-center">
+			<div class="col-8 progressBar">
+				<div class="balanceTitle">
+					<i class="fas fa-chart-bar pr-1" style=" font-size: 60px;"></i>
+					<br>	
+					<span class="">Twój bilans {{balanceTitle}}:</span>
 					<br>
-					{% if percentageIncome!=0 or percentageExpense!=0 %}
-					<div class="progress">
-					{% if percentageIncome!=0 %}									
-							<div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{percentageIncome}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageIncome}}%"></div>
-					{% endif %}
-					{% if percentageExpense!=0 %}
-							<div class="progress-bar bg-danger" role="progressbar"  aria-valuenow="{{percentageExpense}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageExpense}}%"></div>
-					{% endif %}
-					{% endif %}												
-					</div>
+						{% if balance>0 %}										
+							<span style='color:green;'>{{balance}} zł</span>
+						{%  elseif balance<0 %}
+							<span style='color:red;'>{{balance}} zł</span>										
+						{% else %}									
+							<span>{{balance}}zł<br>Brak przychodów oraz wydatków w danym okresie</span>
+						{% endif %}
+				</div>
+				<br>
+				{% if percentageIncome!=0 or percentageExpense!=0 %}
+				<div class="progress">
+				{% if percentageIncome!=0 %}									
+						<div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{percentageIncome}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageIncome}}%"></div>
+				{% endif %}
+				{% if percentageExpense!=0 %}
+						<div class="progress-bar bg-danger" role="progressbar"  aria-valuenow="{{percentageExpense}}" aria-valuemin="0" aria-valuemax="{{balance}}" style="width:{{percentageExpense}}%"></div>
+				{% endif %}
+				{% endif %}												
 				</div>
 			</div>
-			<div class="col-12 py-5">
-				<div class="row col-12">
-					{% if percentageIncome!=0 %}										
-						<div class="col-12 col-md-6 col-lg-6" id="income_chart" style="height: 370px; width: 100%;"></div>								
-					{% endif %}
-
-					{% if percentageExpense!=0 %}										
-						<div class="col-12 col-md-6 col-lg-6" id="expense_chart" style="height: 370px; width: 100%;"></div>								
-					{% endif %}
-				</div>
+		</div>
+		<div class="col-12 py-5">
+			<div class="row col-12">
+				
 			</div>
+		</div>		
+		
+		<div class="row d-flex justify-content-center text-center ">
+			{% if percentageIncome!=0 %}
+			<div class="col-12"><span class="title">Struktura przychodów</span></div>
+			<div class="col-12" id="income_chart"></div>
+			{% endif %}
+			{% if percentageExpense!=0 %}	
+			<div class="col-12"><span class="title">Struktura wydatków</span></div>
+			<div class="col-12 " id="expense_chart"></div>
+			{% endif %}	
+			
 		</div>
 	</div>
-<br>
 </div>
-
 
 
 {% endblock %}
 
 {% block scripts %}
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="/js/balance.js"></script>
 
 <script type="text/javascript">
 
-            function showEditedExpense()
-            {
-                var rowId = event.target.parentNode.parentNode.id;
-              
-                var data = document.getElementById(rowId).querySelectorAll(".row-data-expense");                
-                var date_of_expense = data[0].innerHTML;                
-                var expense_category = data[1].innerHTML;
-				var expense_value = data[2].innerHTML;
-                var expense_comment = data[3].innerHTML;
-                var expense_id = data[4].innerHTML;              
+	function showEditedExpense()
+	{
+	    var rowId = event.target.parentNode.parentNode.id;
+	  
+	    var data = document.getElementById(rowId).querySelectorAll(".row-data-expense");                
+	    var date_of_expense = data[0].innerHTML;
+	    var expense_value = data[1].innerHTML;               
+	    var expense_category = data[2].innerHTML;   
+		var payment_category = data[3].innerHTML;
+	    var expense_comment = data[4].innerHTML;
+	    var expense_id = data[5].innerHTML;              
 
-                document.getElementById("modal_date_of_expense").value = date_of_expense;
-                document.getElementById("modal_expense_category").value = expense_category;                
-                document.getElementById("modal_expense_value").value = expense_value;
-                document.getElementById("modal_expense_comment").value = expense_comment;
-                document.getElementById("modal_expense_id").value = expense_id;
-               
-            }            
+	    document.getElementById("modal_date_of_expense").value = date_of_expense;
+	    document.getElementById("modal_expense_category").value = expense_category;
+	    document.getElementById("modal_expense_value").value = expense_value;
+	    document.getElementById("modal_payment_category").value = payment_category;	    
+	    document.getElementById("modal_expense_comment").value = expense_comment;
+	    document.getElementById("modal_expense_id").value = expense_id;
+	   
+	}            
 </script>
 
 <script type="text/javascript">
 
-            function showEditedIncome()
-            {
-                var rowIncomeId = event.target.parentNode.parentNode.id;
-              
-                var income_data = document.getElementById(rowIncomeId).querySelectorAll(".row-data-income");
+    function showEditedIncome()
+    {
+        var rowIncomeId = event.target.parentNode.parentNode.id;
+      
+        var income_data = document.getElementById(rowIncomeId).querySelectorAll(".row-data-income");
 
-                var date_of_income = income_data[0].innerHTML;                
-                var income_category = income_data[1].innerHTML;
-				var income_value = income_data[2].innerHTML;
-                var income_comment = income_data[3].innerHTML;
-                var income_id = income_data[4].innerHTML;              
+        var date_of_income = income_data[0].innerHTML;                
+        var income_category = income_data[1].innerHTML;
+		var income_value = income_data[2].innerHTML;
+        var income_comment = income_data[3].innerHTML;
+        var income_id = income_data[4].innerHTML;              
 
-                document.getElementById("modal_date_of_income").value = date_of_income;
-                document.getElementById("modal_income_category").value = income_category;                
-                document.getElementById("modal_income_value").value = income_value;
-                document.getElementById("modal_income_comment").value = income_comment;
-                document.getElementById("modal_income_id").value = income_id;
-               
-            }            
+        document.getElementById("modal_date_of_income").value = date_of_income;
+        document.getElementById("modal_income_category").value = income_category;                
+        document.getElementById("modal_income_value").value = income_value;
+        document.getElementById("modal_income_comment").value = income_comment;
+        document.getElementById("modal_income_id").value = income_id;
+       
+    }            
 </script>
 
 <script type="text/javascript">
 
-            function showDeleteIncome()
-            {
-                var rowDeleteIncomeId = event.target.parentNode.parentNode.id;
-              
-                var income_data = document.getElementById(rowDeleteIncomeId).querySelectorAll(".row-data-income");
+    function showDeleteIncome()
+    {
+        var rowDeleteIncomeId = event.target.parentNode.parentNode.id;
+      
+        var income_data = document.getElementById(rowDeleteIncomeId).querySelectorAll(".row-data-income");
 
-                var income_id = income_data[4].innerHTML;              
+        var income_id = income_data[4].innerHTML;              
 
-                document.getElementById("delete_modal_income_id").value = income_id;
-               
-            }            
+        document.getElementById("delete_modal_income_id").value = income_id;
+       
+    }            
 </script>
 
 <script type="text/javascript">
@@ -570,10 +550,9 @@
               
                 var expense_data = document.getElementById(rowDeleteExpenseId).querySelectorAll(".row-data-expense");
 
-                var expense_id = expense_data[4].innerHTML;              
+                var expense_id = expense_data[5].innerHTML;              
 
-                document.getElementById("delete_modal_expense_id").value = expense_id;
-               
+                document.getElementById("delete_modal_expense_id").value = expense_id;               
             }            
 </script>
 
@@ -597,12 +576,11 @@
 </script>
 
 
-<script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
         let incomeEncoded = "{{ incomeDataPoints|json_encode|e('js') }}";
         let expenseEncoded = "{{ expenseDataPoints|json_encode|e('js') }}";
         let balanceSummary = "{{ balance }}";
 </script>
-<script src="/js/balance.js"></script>
+
 {% endblock %}

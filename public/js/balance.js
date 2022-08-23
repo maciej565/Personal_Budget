@@ -4,17 +4,17 @@ $(document).ready(function()
     let expense = JSON.parse(expenseEncoded);
 
     let incomeTable = getTable(income);
-    let expenseTable = getTable(expense);
+    let expenseTable = getExpenseTable(expense);
 
     showIncomeChart(incomeTable, document.getElementById('income_chart'));
     showExpenseChart(expenseTable, document.getElementById('expense_chart'));
 
-    addSummaryInfo();
+    
 
     $(window).resize(function() 
     {
-        showChart(incomeTable, document.getElementById('income_chart'));
-        showChart(expenseTable, document.getElementById('expense_chart'));
+        showIncomeChart(incomeTable, document.getElementById('income_chart'));
+        showExpenseChart(expenseTable, document.getElementById('expense_chart'));
     });
 });
 
@@ -70,6 +70,50 @@ let getTable = function(arrayToFetchData)
     return table;
 };
 
+let getExpenseTable = function(arrayToFetchData) 
+{
+    let table = [['Kategoria', 'Kwota']];
+
+    arrayToFetchData.forEach(element => 
+    {
+        let isReapeted = false;
+        for (let i = 0; i < table.length; i++) 
+        {
+            if(table.length == 1) {
+                table.push([element['expense_name'], 0]);
+                isReapeted = true;
+                break;
+            }
+            else if(element['expense_name'] == table[i][0])
+             {
+                isReapeted = true;
+                break;
+            }
+        }
+        if(!isReapeted) 
+        {
+            table.push([element['expense_name'], 0]);
+            isReapeted = false;
+        }
+    });
+
+    table.forEach(element => 
+    {
+        for (let i = 0; i < arrayToFetchData.length; i++) 
+        {
+            if (element[0] == arrayToFetchData[i]['expense_name']) 
+            {
+                element[1] = parseFloat(element[1]) + parseFloat(arrayToFetchData[i]['amount']);
+            }
+        }
+    });
+
+    table.sort(comparator);
+
+    return table;
+};
+
+
 let showIncomeChart = function(table, element) 
 {
     google.charts.load('current', {'packages':['corechart']});
@@ -83,7 +127,7 @@ let showIncomeChart = function(table, element)
     // Optional; add a title and set the width and height of the chart
     let Options = 
     {
-        title:'Struktura przychodów',
+       title:'',
         width:'100%',
         height:400,
         is3D:true,              
@@ -94,7 +138,7 @@ let showIncomeChart = function(table, element)
 
         },       
         titleTextStyle: 
-        { 
+        {
             alignment: 'center',
             fontName: "'Oswald', sans-serif",        
             fontSize: 24,
@@ -102,6 +146,7 @@ let showIncomeChart = function(table, element)
         },
         legend: 
         {
+            position: 'bottom', 
             alignment: 'center',
             textStyle: 
             {
@@ -130,23 +175,26 @@ let showExpenseChart = function(table, element)
     // Optional; add a title and set the width and height of the chart
     let Options = 
     {
-        title:'Struktura wydatków',
+       title:'',
         width:'100%',
         height:400,
-        is3D:true,        
+        is3D:true,              
         chartArea: 
         {           
             width: '90%',
-            height: 'auto'
+            height: 'auto',
+
         },       
         titleTextStyle: 
-        { 
-            fontName: "'Oswald', sans-serif",            
-            color: '#000000',
-            fontSize: 24
+        {
+            alignment: 'center',
+            fontName: "'Oswald', sans-serif",        
+            fontSize: 24,
+            color: '#000000'
         },
         legend: 
         {
+            position: 'bottom', 
             alignment: 'center',
             textStyle: 
             {
@@ -161,4 +209,8 @@ let showExpenseChart = function(table, element)
     chart.draw(data, Options);   
     }
 }
+
+
+
+
 

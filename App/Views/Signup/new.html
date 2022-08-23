@@ -45,21 +45,12 @@
                 </div>
             {% endif %}
 			
-			<div class="form-group input-group">
-				<span class="input-group-text borderDesign"><i class="fa fa-lock"></i></span>
-				<input type="password" class="form-control borderDesign" id="password1" placeholder="hasło" name="password1"/>
-			</div>
-            {% if user.passwordErrors is not empty %}
-                <div class="error">
-                {% for passwordErrors in user.passwordErrors %}
-               	<p>{{passwordErrors}}</p>
-                {% endfor %}
-                </div>
-            {% endif %}
+			
+            
 			
 			<div class="form-group input-group">
                 <span class="input-group-text borderDesign "><i class="fa fa-lock"></i></span>
-                <input class="form-control borderDesign" id="password2" placeholder="powtórz hasło" name="password2" type="password">
+                <input class="form-control borderDesign" id="password1" placeholder="hasło" name="password1" type="password">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
                         <a href="#" class="text-dark" id="icon-click">
@@ -68,6 +59,13 @@
                     </div>
                 </div>
             </div>
+            {% if user.passwordErrors is not empty %}
+                <div class="error">
+                {% for passwordErrors in user.passwordErrors %}
+                <p>{{passwordErrors}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
 
             <div class = "extraText">{{activationInfo}}</div>
             
@@ -110,17 +108,8 @@
                         required: true,
                         email: true
                         remote: '/account/validate-email'
-                    },
-                    password1: 
-                    {
-                        required: true,
-                        minlength: 8,
-                        validPassword: true
-                    },
-                    password2: 
-                    {
-                        equalTo: '#password1'
-                    }
+                    },                    
+                   
                 },
                 messages: 
                 {
@@ -132,11 +121,12 @@
         	});
 </script>
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function()
+    {
         $("#icon-click").click(function()
         {
             $("#icon").toggleClass("fa-eye-slash");            
-            var input = $("#password2");
+            var input = $("#password1");
             if(input.attr("type")==="password")
             {
                 input.attr("type","text");
@@ -146,24 +136,7 @@
                 input.attr("type","password");
             }
         });
-        $("#icon-click").click(function()
-        {
-            $("#icon").toggleClass("fa-eye-slash");
-            var input = $("#password1");           
-            if(input.attr("type")==="password")
-            {
-                input.attr("type","text");
-            }
-            else
-            {
-                input.attr("type","password");
-            }
-        });
-
-
     });
 </script>
-
-
 
 {% endblock %}

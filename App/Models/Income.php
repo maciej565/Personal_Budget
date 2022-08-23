@@ -127,6 +127,38 @@ class Income extends \Core\Model
         return $stmt->fetchAll();
     }
 
+    public static function checkIncomeCategoryRecordsExists($user_id, $deletedIncomesCategoryName) 
+    {
+        
+        $deletedIncomesCategoryId = static::getEditedIncomeCategoryId($user_id, $deletedIncomesCategoryName);
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE user_id = :user_id AND income_category_assigned_to_user_id =:category_id' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':category_id', $deletedIncomesCategoryId, PDO::PARAM_STR );
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public static function getEditedIncomeCategoryId( $user_id, $incomeCategoryName)
+    {
+
+        $db = static::getDB();
+        
+        $stmt = $db->prepare( 'SELECT id FROM incomes_category_assigned_to_users WHERE name =:name AND user_id =:user_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $incomeCategoryName, PDO::PARAM_STR );
+        
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+
 
     public static function addNewIncomeCategory( $user_id, $newIncomeCategoryName)
     {

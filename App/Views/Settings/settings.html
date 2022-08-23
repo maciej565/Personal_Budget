@@ -114,9 +114,9 @@
 												<h5 class="modal-title text-center" id="deleteIncomeModalId">Podaj kategorię którą chcesz usunąć</h5>
 											</div>
 											<form action="deleteIncomesCategory" method='post'>
-												<div class="modal-body">
+												<div class="modal-body">													
 													<form action="getSingleIncomeRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" required>
+														<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" id="deletedIncomeCategory" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
 															{% for value in userIncomeCategories %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
@@ -127,9 +127,30 @@
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxIncome" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+
+													<div class="modal fade" id="alertIncomeModal" tabindex="-1" role="dialog" aria-labelledby="alertIncomeModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">
+													          <p id="errorIncome" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>
+
 												</div>
+
 											</form>
 										</div>
 									</div>
@@ -276,19 +297,37 @@
 											<form action="deleteExpensesCategory" method='post'>
 												<div class="modal-body">
 													<form action="getSingleExpenseRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" required>
+														<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" id="deletedExpenseCategory" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
 															{% for value in userExpenseCategories %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
 								                        	{% endfor %}
 														</select>
-													</form>													
+													</form>												
 													
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxExpense" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+													<div class="modal fade" id="alertExpenseModal" tabindex="-1" role="dialog" aria-labelledby="alertExpenseModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">													          
+													          <p id="errorExpense" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>													 
 												</div>
 											</form>
 										</div>
@@ -436,7 +475,7 @@
 											<form action="deletePaymentMethod" method='post'>
 												<div class="modal-body">
 													<form action="getSinglePaymentRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" required>
+														<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" id="deletedPaymentMethod" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz metodę płatności</option>
 															{% for value in userPaymentMethods %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
@@ -447,8 +486,27 @@
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxPayment" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+
+													<div class="modal fade" id="alertPaymentModal" tabindex="-1" role="dialog" aria-labelledby="alertPaymentModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">
+													          <p id="errorPayment" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>
 												</div>
 											</form>
 										</div>
@@ -634,6 +692,42 @@ $(document).ready(function()
         }
     });
 });
+</script>
+<script>
+	$(document).ready(function()
+	{
+	  $('#alertBoxIncome').click(function()
+	  {
+		var deletedIncomeCategory = document.getElementById("deletedIncomeCategory").value;
+	    $("#errorIncome").html("Czy na pewno chcesz usunąć kategorię przychodów "+deletedIncomeCategory+"?");
+	      $('#alertIncomeModal').modal("show");
+	  });  
+
+	});
+</script>
+<script>
+	$(document).ready(function()
+	{	 
+	  $('#alertBoxExpense').click(function()
+	  {
+	  	var deletedExpenseCategory = document.getElementById("deletedExpenseCategory").value;
+	    $("#errorExpense").html("Czy na pewno chcesz usunąć kategorię wydatków "+deletedExpenseCategory+"?");
+	      $('#alertExpenseModal').modal("show");
+	  });
+
+	});
+</script>
+<script>
+	$(document).ready(function()
+	{	 
+	  $('#alertBoxPayment').click(function()
+	  {
+	  	var deletedPaymentMethod = document.getElementById("deletedPaymentMethod").value;
+	    $("#errorPayment").html("Czy na pewno chcesz usunąć kategorię płatności "+deletedPaymentMethod+"?");
+	      $('#alertPaymentModal').modal("show");
+	  });
+
+	});
 </script>
 
 {% endblock %}

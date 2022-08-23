@@ -154,18 +154,33 @@ class Settings extends Authenticated
         $active ='3';
         $this -> newAction( $pass, $error, $active);
     }
-
+    
     public function moveIncomesToDifferentCategoryAction()
     {
+
         $deletedIncomeCategory = $_POST['deletedIncomeCategory'];
+
         $targetedIncomeCategory = $_POST['targetedIncomeCategory'];
-        Income::moveIncomesToDifferentCategory($this->user->id, $deletedIncomeCategory, $targetedIncomeCategory);
-        Income::deleteIncomesFromUserIncomeCategory( $this->user->id, $deletedIncomeCategory );
-        Income::deleteIncomesCategory( $this->user->id, $deletedIncomeCategory );
-        $pass = "Kategoria została usunięta";
-        $error = "Usunięta kategoria nie zawierała rekordów"; 
-        $active ='3';
-        $this -> newAction( $pass, $error, $active); 
+
+        
+        if (Income::checkIncomeCategoryRecordsExists($this->user->id, $deletedIncomeCategory))
+        {
+            Income::moveIncomesToDifferentCategory($this->user->id, $deletedIncomeCategory, $targetedIncomeCategory);
+            Income::deleteIncomesFromUserIncomeCategory( $this->user->id, $deletedIncomeCategory );
+            Income::deleteIncomesCategory( $this->user->id, $deletedIncomeCategory );
+            $pass = "Kategoria została usunięta, a rekordy przeniesione do nowej kategorii";
+            $error = ''; 
+            $active ='3';
+            $this -> newAction( $pass, $error, $active);
+        }
+        else
+        {
+            Income::deleteIncomesCategory( $this->user->id, $deletedIncomeCategory );
+            $pass = "Kategoria została usunięta";
+            $error = "Usunięta kategoria nie zawierała rekordów";  
+            $active ='3';
+            $this -> newAction( $pass, $error, $active);
+        }         
     }
     
 
@@ -244,7 +259,7 @@ class Settings extends Authenticated
 	        Expense::moveExpensesToDifferentCategory($this->user->id, $deletedExpenseCategory, $targetedExpenseCategory);
 	        Expense::deleteExpensesFromUserExpenseCategory( $this->user->id, $deletedExpenseCategory );
 	        Expense::deleteExpensesCategory( $this->user->id, $deletedExpenseCategory );
-	        $pass = "Kategoria została usunięta";
+	        $pass = "Kategoria została usunięta, a rekordy przeniesione do nowej kategorii";
 	        $error = ''; 
 	        $active ='6';
 	        $this -> newAction( $pass, $error, $active);
