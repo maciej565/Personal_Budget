@@ -153,7 +153,9 @@
 										</th>
 										<th scope="col" class="col-2 ">   
 											Edytuj/Usuń
-										</th>										  
+										</th>
+
+
 									</tr>
 								</thead>
 
@@ -170,6 +172,7 @@
 									
 									<td class="row-data-expense" id="expense_comment">{{value.expense_comment}}</td>
 									<td class="row-data-expense" id="expense_id" hidden>{{value.id}} </td>
+									<td class="row-data-expense" id="expenseLimit" hidden>{{value.expenseLimit}} </td>
 									<td><button type="button" onclick="showEditedExpense()" data-toggle="modal" data-target='#edit_expense'  class="btn fas fa-edit "></button>
 										<button class=" btn fas fa-ban col-3" style='color:red;' onclick="showDeleteExpense()" data-toggle="modal" data-target='#delete_expense' style='color:red;' ></button></td>		
 								
@@ -479,6 +482,7 @@
 {% block scripts %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="/js/balance.js"></script>
+<script type="text/javascript" src ="/js/expense-limit-errors.js"></script>
 
 <script type="text/javascript">
 

@@ -47,11 +47,19 @@
 							 
 
 							{% if active==1 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}								
 							
 						</form>
@@ -66,7 +74,7 @@
 			        	<form class="card-body mx-auto" action="editIncomeCategory" method="post"> 
 			        		<label class="formTitle">Edytuj kategorię</label>
 
-							<select class="form-control col-12 borderDesign" name="incomeCategory" required>
+							<select id = "incomeCategory" class="form-control col-12 borderDesign" name="incomeCategory" onchange="incomeCategory()"  required>
 								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
 								{% for value in userIncomeCategories %}
 	                            <option value="{{value.name}}">{{value.name}}</option>                                
@@ -75,18 +83,26 @@
 
 							<div class="col-12">
 								<label class="formTitle" for="editedIncomeCategory">Nowa kategoria</label>
-								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value = "" required>
+								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value ="" required>
 							</div>
 
 							<div class="d-flex justify-content-center py-4">
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
 							</div>
 							{% if active==2 %}
-							{% if error is not empty %}                              
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 			    	</div>
@@ -96,6 +112,7 @@
 					</button>
 
 					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#incomeAccordionExample">
+					<h4><span class = "deleteCategory"></span></h4>
 			        	<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        			  				
 
@@ -194,14 +211,17 @@
 
 							{% if active==3 %}
 							{% if error and pass is not empty %}
-							<div class="correct">{{pass|join('<br/>')|raw}}</div>                           
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
-                            {% else %}
-                            {% if error is not empty %}
-                            <div class="error">{{error|join('<br/>')|raw}}</div> 
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
 							{% endif %}	
 							{% endif %}	
 			    	</div>
@@ -221,17 +241,30 @@
 								<label class="formTitle" for="newExpenseCategory">Nowa kategoria</label>
 								<input type="text" class="form-control borderDesign" id="newExpenseCategory" name="newExpenseCategory" value = "" required>
 							</div>
+							<div class="form-check mb-2 limitCheckbox">
+                                <input type="checkbox" class="form-check-input" name = "expenseLimit" id="newLimit">
+                                <label class="form-check-label" for="limitCheckbox">Ustaw limit</label>
+                            </div>
+                            <input type="number" class="form-control mb-3" name = "newExpenseLimits" id = "newExpenseLimits" style = "display: none;">
 							<div class="row d-flex justify-content-center py-4">
 								<div class="col-12 col-sm-1"></div>
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==4 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -253,6 +286,11 @@
 								<option value="{{value.name}}">{{value.name}}</option>                                
 								{% endfor %}
 							</select>
+							<div class="form-check mb-2 limitCheckbox">
+                                <input type="checkbox" class="form-check-input" name = "expenseLimit" id="limitCheckbox">
+                                <label class="form-check-label" for="limitCheckbox">Ustaw limit</label>
+                            </div>
+                            <input type="number" class="form-control mb-3" name = "limitAmount" id = "limitAmount" style = "display: none;">
 
 							<div class="col-12">
 								<label class="formTitle" for="editedExpenseCategory">Nowa kategoria:</label>
@@ -265,11 +303,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==5 %}
-							{% if error is not empty %}                            
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -280,6 +326,7 @@
 					</button>
 					
 					<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#expenseAccordionExample">
+						<h4><span class = "deleteCategory"></span></h4>
 						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        		<select class="form-control borderDesign text-left" id="delete_expense_option" name="delete_option" autocomplete="off" required>
 								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
@@ -376,12 +423,14 @@
 							<div class="correct">{{pass|join('<br/>')|raw}}</div>
 							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
 							{% else %}
+
 							{% if error is not empty %}
 							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
 
-                            {% endif %}	
+                            {% endif %}
+                            	
 							{% endif %}	
 							{% endif %}	
 					</div>
@@ -409,11 +458,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==7 %}
-							{% if error is not empty %}                           
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -444,11 +501,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==8 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -458,6 +523,7 @@
 					</button>
 
 					<div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#paymentAccordionExample">
+						<h4><span class = "deleteCategory"></span></h4>
 						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        		<select class="form-control borderDesign text-left" id="delete_payment_option" name="delete_option" autocomplete="off" required>
 								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
@@ -551,16 +617,19 @@
 
 							{% if active==9 %}
 							{% if error and pass is not empty %}
-							<div class="correct">{{pass|join('<br/>')|raw}}</div>                    
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
-                            {% if error is not empty %}
-                           	<div class="error">{{error|join('<br/>')|raw}}</div>
-                           	{% else %}
-                           	<div class="correct">{{pass|join('<br/>')|raw}}</div> 
-							{% endif %}
-							{% endif %}
-							{% endif %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+
+                            {% endif %}
+                            	
+							{% endif %}	
+							{% endif %}	
 					</div>
 				</div>
 
@@ -577,6 +646,34 @@
 {% endblock %}
 
 {% block scripts %}
+<script src = "/js/expense-limit.js"></script>
+<script>
+	$('#limitCheckbox').change(function() 
+	{
+    if($(this).is(":checked")) 
+    {        
+        $('#limitAmount').css("display", "inline");
+    }
+    else 
+    {
+        $('#limitAmount').css("display", "none");        
+    }
+});
+
+$('#newLimit').change(function()
+{
+    if($(this).is(":checked")) 
+    {        
+        $('#newExpenseLimits').css("display", "inline");
+    }
+    else 
+    {
+        $('#newExpenseLimits').css("display", "none");        
+    }
+});
+
+
+</script>
 <script>
 $(document).ready(function()
 {  
@@ -729,5 +826,6 @@ $(document).ready(function()
 
 	});
 </script>
+
 
 {% endblock %}

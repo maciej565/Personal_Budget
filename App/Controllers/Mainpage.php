@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
+use \App\Models\DateManager;
 use \App\Models\Balance;
 use \App\Auth;
 use \App\Flash;
@@ -19,8 +20,8 @@ class Mainpage extends Authenticated
     
 	public function mainpageAction()
 	{
-		$currentMonthDate = Balance::getCurrentMonthDate();
-		$lastMonthDate = Balance::getlastMonthDate();
+		$currentMonthDate = DateManager::getCurrentMonthDate();
+		$lastMonthDate = DateManager::getlastMonthDate();
 		$currentMonthBalance = Balance::getBalance($currentMonthDate,$this->user->id);
 		$lastMonthBalance = Balance::getBalance($lastMonthDate,$this->user->id);
 		$username = User::getUsername($this->user->id);

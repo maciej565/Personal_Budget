@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Auth;
+use \App\Models\DateManager;
 use \App\Models\Balance;
 use \App\Models\Income;
 use \App\Models\Expense;
@@ -42,7 +43,7 @@ class showBalance extends Authenticated
     public function currentMonthAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getCurrentMonthDate();        
+        $date = DateManager::getCurrentMonthDate();        
         $incomeBalanceTable = Balance::getIncomes($date,$this->user->id);
         $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);        
         $balance = Balance::getBalance($date,$this->user->id);
@@ -81,7 +82,7 @@ class showBalance extends Authenticated
     public function lastMonthAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getlastMonthDate();        
+        $date = DateManager::getlastMonthDate();        
         $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
         $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
         $balance = Balance::getBalance($date,$this->user->id);
@@ -119,7 +120,7 @@ class showBalance extends Authenticated
     public function currentYearAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getCurrentYearDate();
+        $date = DateManager::getCurrentYearDate();
         $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
         $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);      
         $incomeBalanceTable = Balance::getIncomes($date,$this->user->id);
@@ -158,7 +159,7 @@ class showBalance extends Authenticated
     public function selectedDateAction($arg1='', $arg2='', $arg3='', $arg4='' )
     {               
         $success = false;         
-        $date = Balance::getUserSelectedDate($arg3,$arg4);
+        $date = DateManager::getUserSelectedDate($arg3,$arg4);
         if (empty($date))
         {
             $message = '';
