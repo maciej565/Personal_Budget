@@ -4,7 +4,10 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Auth;
+use \App\Models\DateManager;
 use \App\Models\Balance;
+use \App\Models\Income;
+use \App\Models\Expense;
 use \App\Flash;
 
 
@@ -28,29 +31,39 @@ class showBalance extends Authenticated
         {
             $this->redirect( '/showBalance/lastMonth');
         }
+        
         else if ($option_number=='3')
         {
             $this->redirect( '/showBalance/currentYear');
         }
     }
 /*----------------------------------------------------------------------------------*/
-    public function currentMonthAction()
+    
+
+    public function currentMonthAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getCurrentMonthDate();        
-        $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
-        $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
+        $date = DateManager::getCurrentMonthDate();        
+        $incomeBalanceTable = Balance::getIncomes($date,$this->user->id);
+        $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);        
         $balance = Balance::getBalance($date,$this->user->id);
         $percentageIncome = Balance::percentageIncome($date,$this->user->id);
         $percentageExpense = Balance::percentageExpense($date,$this->user->id);
         $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
-        $expenseDataPoints = Balance::getExpenses($date,$this->user->id);  
+        $expenseDataPoints = Balance::getExpenses($date,$this->user->id);
+        $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id); 
+        $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
+        $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);
+        
 
         View::renderTemplate('Mainpage/balance.html', 
         [
             'user' => $this->user,
             'incomeBalanceTable' => $incomeBalanceTable,
-            'expenseBalanceTable' => $expenseBalanceTable,
+            'userIncomeCategories' => $userIncomeCategories,
+            'userExpenseCategories' => $userExpenseCategories,
+            'userPaymentMethods' => $userPaymentMethods,
+            'expenseBalanceTable' => $expenseBalanceTable,            
             'balance' => $balance,
             'percentageIncome' => $percentageIncome,
             'percentageExpense' => $percentageExpense,
@@ -59,27 +72,35 @@ class showBalance extends Authenticated
             'first_date' => $date['first_date'],
             'second_date' => $date['second_date'],
             'balancePeriod' => "Bieżący miesiąc",
-            'balanceTitle' => "z bieżącego miesiąca"
-            
+            'balanceTitle' => "z bieżącego miesiąca",
+            'success' => $arg1,
+            'error' => $arg2
+        
         ] );
     }
 
-    public function lastMonthAction()
+    public function lastMonthAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getlastMonthDate();        
+        $date = DateManager::getlastMonthDate();        
         $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
         $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
         $balance = Balance::getBalance($date,$this->user->id);
         $percentageIncome = Balance::percentageIncome($date,$this->user->id);
         $percentageExpense = Balance::percentageExpense($date,$this->user->id);
         $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
-        $expenseDataPoints = Balance::getExpenses($date,$this->user->id); 
+        $expenseDataPoints = Balance::getExpenses($date,$this->user->id);
+        $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id);
+        $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
+        $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);
         
         View::renderTemplate('Mainpage/balance.html', 
         [
             'user' => $this->user,
             'incomeBalanceTable' => $incomeBalanceTable,
+            'userIncomeCategories' => $userIncomeCategories,
+            'userExpenseCategories' => $userExpenseCategories,
+            'userPaymentMethods' => $userPaymentMethods,
             'expenseBalanceTable' => $expenseBalanceTable,
             'balance' => $balance,
             'percentageIncome' => $percentageIncome,
@@ -89,27 +110,35 @@ class showBalance extends Authenticated
             'first_date' => $date['first_date'],
             'second_date' => $date['second_date'],
             'balancePeriod' => "Ostatni miesiąc",
-            'balanceTitle' => "z ostatniego miesiąca"
+            'balanceTitle' => "z ostatniego miesiąca",
+            'success' => $arg1,
+            'error' => $arg2
             
         ] );
     }
 
-    public function currentYearAction()
+    public function currentYearAction($arg1='', $arg2='')
     {
         $success = false; 
-        $date = Balance::getCurrentYearDate();        
+        $date = DateManager::getCurrentYearDate();
+        $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
+        $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);      
         $incomeBalanceTable = Balance::getIncomes($date,$this->user->id);
         $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
         $balance = Balance::getBalance($date,$this->user->id);
         $percentageIncome = Balance::percentageIncome($date,$this->user->id);
         $percentageExpense = Balance::percentageExpense($date,$this->user->id);
         $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
-        $expenseDataPoints = Balance::getExpenses($date,$this->user->id); 
+        $expenseDataPoints = Balance::getExpenses($date,$this->user->id);
+        $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id); 
 
         View::renderTemplate('Mainpage/balance.html', 
         [
             'user' => $this->user,
+            'userExpenseCategories' => $userExpenseCategories,
+            'userPaymentMethods' => $userPaymentMethods,
             'incomeBalanceTable' => $incomeBalanceTable,
+            'userIncomeCategories' => $userIncomeCategories,
             'expenseBalanceTable' => $expenseBalanceTable,
             'balance' => $balance,
             'percentageIncome' => $percentageIncome,
@@ -119,38 +148,308 @@ class showBalance extends Authenticated
             'first_date' => $date['first_date'],
             'second_date' => $date['second_date'],
             'balancePeriod' => "Bieżący rok",
-            'balanceTitle' => "z bieżącego roku"
+            'balanceTitle' => "z bieżącego roku",
+            'success' => $arg1,
+            'error' => $arg2
+
             
         ] );
     }
 
-    public function selectedDateAction()
+    public function selectedDateAction($arg1='', $arg2='', $arg3='', $arg4='' )
+    {               
+        $success = false;         
+        $date = DateManager::getUserSelectedDate($arg3,$arg4);
+        if (empty($date))
+        {
+            $message = '';
+            $error = "Wystąpił błąd, spróbuj ponownie";
+            $this -> currentMonthAction($message, $error);
+        }
+        else
+        {
+
+            $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
+            $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);       
+            $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
+            $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
+            $balance = Balance::getBalance($date,$this->user->id);
+            $percentageIncome = Balance::percentageIncome($date,$this->user->id);
+            $percentageExpense = Balance::percentageExpense($date,$this->user->id);
+            $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
+            $expenseDataPoints = Balance::getExpenses($date,$this->user->id); 
+            $userIncomeCategories = Income::getUserIncomeCategories( $this->user->id);
+           
+
+            View::renderTemplate('Mainpage/balance.html', 
+            [
+
+                'user' => $this->user,            
+                'userExpenseCategories' => $userExpenseCategories,
+                'userPaymentMethods' => $userPaymentMethods,
+                'incomeBalanceTable' => $incomeBalanceTable,
+                'userIncomeCategories' => $userIncomeCategories,
+                'expenseBalanceTable' => $expenseBalanceTable,
+                'balance' => $balance,
+                'percentageIncome' => $percentageIncome,
+                'percentageExpense' => $percentageExpense,
+                'incomeDataPoints' => $incomeDataPoints,
+                'expenseDataPoints' => $expenseDataPoints, 
+                'first_date' => $date['first_date'],
+                'second_date' => $date['second_date'],
+                'balancePeriod' => "Własny przedział czasu",
+                'balanceTitle' => "od ".$date['first_date']." do ".$date['second_date'],
+                'success' => $arg1,
+                'error' => $arg2
+                
+            ] );
+
+        }   
+    }
+
+    protected function editSingleExpenseAction() 
     {
-        $success = false; 
-        $date = Balance::getUserSelectedDate();        
-        $incomeBalanceTable = Balance::getIncomes( $date,$this->user->id);
-        $expenseBalanceTable = Balance::getExpenses( $date,$this->user->id);
-        $balance = Balance::getBalance($date,$this->user->id);
-        $percentageIncome = Balance::percentageIncome($date,$this->user->id);
-        $percentageExpense = Balance::percentageExpense($date,$this->user->id);
-        $incomeDataPoints = Balance::getIncomes($date,$this->user->id);
-        $expenseDataPoints = Balance::getExpenses($date,$this->user->id); 
+
+        if(!isset($_POST['modal_expense_id']))
+        {
+            $message = "";        
+            $error = '';        
+            $this -> currentMonthAction($message, $error); 
+        }
+        else
+        {
+            $expense_id = $_POST['modal_expense_id'];            
+            $expense_amount = $_POST['modal_expense_value'];
+            $date_of_expense = $_POST['modal_date_of_expense'];
+            $expense_category = $_POST['modal_expense_category'];
+            $payment_category = $_POST['modal_payment_category'];            
+            $expense_comment = $_POST['modal_expense_comment'];
+            $date = ['first_date' => $_POST['expense_first_date'],
+            'second_date' => $_POST['expense_second_date']];            
+            $currentMonthDate = Balance::getCurrentMonthDate();
+            $currentYearDate = Balance::getCurrentYearDate();
+            $lastMonthdate = Balance::getLastMonthDate();        
+
+            if (Expense::editSingleExpense($this->user->id, $expense_id, $expense_comment, $expense_amount, $date_of_expense, $expense_category, $payment_category))
+            {
+                if ($date === $currentMonthDate) 
+                {
+                    $message = "Poprawnie zmieniono wydatek";
+                    $error = '';
+                    $this -> currentMonthAction($message, $error);
+                }
+                else if ($date === $currentYearDate) 
+                {
+                    $message = "Poprawnie zmieniono wydatek";
+                    $error = '';
+                    $this -> currentYearAction($message, $error);
+                }
+                else if ($date === $lastMonthdate) 
+                {
+                    $message = "Poprawnie zmieniono wydatek";
+                    $error = '';
+                    $this -> lastMonthAction($message, $error);
+                }
+                else
+                {
+                    $message = "Poprawnie zmieniono wydatek";
+                    $error = '';
+                    $first_date = $_POST['first_date'];
+                    $second_date = $_POST['second_date'];
+                    $this -> selectedDateAction($message, $error, $first_date, $second_date);                
+                }
+            }
+            else
+            {
+                $message = '';
+                $error = "Niestety nie udało się zmienić wydatku";
+                $this -> currentMonthAction($message, $error);
+            }
+        }    
+    }   
+
+    protected function editSingleIncomeAction() 
+    {
+                      
+      
+
+        if(!isset($_POST['modal_income_id']))
+        {
+
+
+        $message = "";
         
-        View::renderTemplate('Mainpage/balance.html', 
-        [
-            'user' => $this->user,
-            'incomeBalanceTable' => $incomeBalanceTable,
-            'expenseBalanceTable' => $expenseBalanceTable,
-            'balance' => $balance,
-            'percentageIncome' => $percentageIncome,
-            'percentageExpense' => $percentageExpense,
-            'incomeDataPoints' => $incomeDataPoints,
-            'expenseDataPoints' => $expenseDataPoints, 
-            'first_date' => $date['first_date'],
-            'second_date' => $date['second_date'],
-            'balancePeriod' => "Własny przedział czasu",
-            'balanceTitle' => "od ".$date['first_date']." do ".$date['second_date']
+        $error = '';
+        
+        $this -> currentMonthAction($message, $error); 
+
+        }
+        else
+
+        {
+            $income_id = $_POST['modal_income_id'];
+            $first_date = $_POST['first_date'];
+            $second_date = $_POST['second_date'];
+
+
+            $income_amount = $_POST['modal_income_value'];
+            $date_of_income = $_POST['modal_date_of_income'];
+            $income_category = $_POST['modal_income_category'];
             
-        ] );
-    } 
+            $income_comment = $_POST['modal_income_comment'];
+            $date = ['first_date' => $_POST['income_first_date'],
+            'second_date' => $_POST['income_second_date']];
+            $currentMonthDate = Balance::getCurrentMonthDate();
+            $currentYearDate = Balance::getCurrentYearDate();
+            $lastMonthdate = Balance::getLastMonthDate();        
+                   
+            
+            if (Income::editSingleIncome($this->user->id, $income_id, $income_comment, $income_amount, $date_of_income, $income_category))
+            {
+                if ($date === $currentMonthDate) 
+                {
+                    $message = "Poprawnie zmieniono przychód";
+                    $error = '';
+                    $this -> currentMonthAction($message, $error);
+
+                }
+                else if ($date === $currentYearDate) 
+                {
+                    $message = "Poprawnie zmieniono przychód";
+                    $error = '';
+                    $this -> currentYearAction($message, $error);
+                }
+                else if ($date === $lastMonthdate) 
+                {
+                    $message = "Poprawnie zmieniono przychód";
+                    $error = '';
+                    $this -> lastMonthAction($message, $error);
+                }
+                else
+                {
+                    $message = "Poprawnie zmieniono przychód";
+                    $error = '';
+                    $first_date = $_POST['first_date'];
+                    $second_date = $_POST['second_date'];
+                    $this -> selectedDateAction($message, $error, $first_date, $second_date);                
+                }
+            }
+            else
+            {
+                $message = '';
+                $error = "Niestety nie udało się zmienić przychodu";
+                $this -> currentMonthAction($message, $error); 
+            }          
+
+        }
+         
+        
+    }
+   
+
+
+    protected function deleteSingleIncomeAction() 
+    {
+        if(!isset($_POST['deleted_income_id']))
+        {
+
+
+        $message = "";
+        
+        $error = '';
+        
+        $this -> currentMonthAction($message, $error); 
+
+        }
+        else
+        {
+            $income_id = $_POST['deleted_income_id'];      
+            $date = ['first_date' => $_POST['income_first_date'],
+            'second_date' => $_POST['income_second_date']];
+            $currentMonthDate = Balance::getCurrentMonthDate();
+            $currentYearDate = Balance::getCurrentYearDate();
+            $lastMonthdate = Balance::getLastMonthDate();
+            
+            if (Income::deleteSingleIncome($this->user->id, $income_id))
+            {
+                if ($date === $currentMonthDate) 
+                {
+                    $message = "Usunięto przychód!";
+                    $error = '';
+                    $this -> currentMonthAction($message, $error);
+
+                }
+                else if ($date === $currentYearDate) 
+                {
+                    $message = "Usunięto przychód!";
+                    $error = '';
+                    $this -> currentYearAction($message, $error);
+                }
+                else if ($date === $lastMonthdate) 
+                {
+                    $message = "Usunięto przychód";
+                    $error = '';
+                    $this -> lastMonthAction($message, $error);
+                }
+                else
+                {
+                    $message = "Usunięto przychód";
+                    $error = '';
+                    $first_date = $_POST['first_date'];
+                    $second_date = $_POST['second_date'];
+                    $this -> selectedDateAction($message, $error, $first_date, $second_date);                
+                }
+            }         
+        }              
+    }        
+
+        
+
+
+    protected function deleteSingleExpenseAction() 
+    {
+        
+        $expense_id = $_POST['deleted_expense_id'];      
+        $date = ['first_date' => $_POST['expense_first_date'],
+        'second_date' => $_POST['expense_second_date']];
+        $currentMonthDate = Balance::getCurrentMonthDate();
+        $currentYearDate = Balance::getCurrentYearDate();
+        $lastMonthdate = Balance::getLastMonthDate();
+
+
+            
+               
+        
+        if (Expense::deleteSingleExpense($this->user->id, $expense_id))
+
+        {
+            if ($date === $currentMonthDate) 
+            {
+                $message = "Usunięto wydatek!";
+                $error = '';
+                $this -> currentMonthAction($message, $error);
+
+            }
+            else if ($date === $currentYearDate) 
+            {
+                $message = "Usunięto wydatek!";
+                $error = '';
+                $this -> currentYearAction($message, $error);
+            }
+            else if ($date === $lastMonthdate) 
+            {
+                $message = "Usunięto wydatek";
+                $error = '';
+                $this -> lastMonthAction($message, $error);
+            }
+        }
+        else
+        {
+            $message = '';
+            $error = "Niestety nie udało się usunąć wydatku";
+            $this -> currentMonthAction($message, $error);
+        }             
+
+    }
+
 }

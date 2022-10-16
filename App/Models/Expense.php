@@ -5,6 +5,7 @@ namespace App\Models;
 use PDO;
 use \Core\View;
 use \App\Flash;
+use \App\DateManager;
 
 
 
@@ -26,19 +27,16 @@ class Expense extends \Core\Model
     {
         $db = static::getDB();
 
-        $query_expense_categories=$db->prepare("SELECT id, name FROM expenses_category_assigned_to_users WHERE user_id=:id");
+        $query_expense_categories=$db->prepare("SELECT id, name, expenseLimit FROM expenses_category_assigned_to_users WHERE user_id=:id");
 
         $query_expense_categories->bindValue(':id',$_SESSION['user_id'],PDO::PARAM_INT);
         $query_expense_categories->execute();
-        $expense_categories=$query_expense_categories->fetchAll();
+        $expense_categories=$query_expense_categories->fetchAll(PDO::FETCH_ASSOC);
 
         return $expense_categories; 
     }
-
-
-
    
-     public static function getUserPaymentMethods($id) 
+    public static function getUserPaymentMethods($id) 
     {
         $db = static::getDB();
 
@@ -49,9 +47,7 @@ class Expense extends \Core\Model
         $payment_methods=$query_payment_methods->fetchAll();
 
         return $payment_methods; 
-    }
-
-    
+    }    
 
     public function getUserCategoryId($user_id) 
     {
@@ -83,9 +79,7 @@ class Expense extends \Core\Model
         $payment_methods = $stmt -> fetch();
 
         return $payment_methods['id'];
-    }
-
-    
+    }   
 
      public function saveUserExpense($user_id) 
     {
@@ -111,7 +105,7 @@ class Expense extends \Core\Model
             return $stmt->execute();
         }
         return false;
-    }
+    } 
 
     public static function checkExpenseCategoryExists($user_id, $oldExpenseCategoryName) 
     {
@@ -129,16 +123,15 @@ class Expense extends \Core\Model
         return $stmt->fetchAll();
     }
 
-
-
-    public static function addNewExpenseCategory( $user_id, $newExpenseCategoryName)
+    public static function addNewExpenseCategory( $user_id, $newExpenseCategoryName, $newExpenseLimitAmount)
     {
         $db = static::getDB();
         
-        $stmt = $db->prepare('INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :user_id, :name)');
+        $stmt = $db->prepare('INSERT INTO expenses_category_assigned_to_users VALUES (NULL, :user_id, :name, :newExpenseLimitAmount )');
         
         $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
-        $stmt->bindValue( ':name', $newExpenseCategoryName, PDO::PARAM_STR );        
+        $stmt->bindValue( ':name', $newExpenseCategoryName, PDO::PARAM_STR );
+        $stmt->bindValue( ':newExpenseLimitAmount', $newExpenseLimitAmount, PDO::PARAM_STR );       
         
         return $stmt->execute();
     }
@@ -171,6 +164,23 @@ class Expense extends \Core\Model
         
         return $stmt->execute();    
     }
+
+    public static function editExpenseCategoryLimit ($user_id, $expense_category_name, $newExpenseCategoryLimit) 
+    {
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'UPDATE expenses_category_assigned_to_users SET expenseLimit = :newExpenseCategoryLimit WHERE name = :name AND user_id =:user_id' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $expense_category_name, PDO::PARAM_STR );
+        $stmt->bindValue( ':newExpenseCategoryLimit', $newExpenseCategoryLimit, PDO::PARAM_INT );
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        
+        return $stmt->execute();
+    }
+
+
+
 
     public static function checkExpenseCategoryRecordsExists($user_id, $deletedExpensesCategoryName) 
     {
@@ -397,4 +407,179 @@ class Expense extends \Core\Model
         }
         return true;
     }
+
+    public static function editSingleExpense($user_id, $expense_id, $expense_comment, $expense_amount, $date_of_expense, $expense_category, $payment_category) 
+    {
+        $db = static::getDB();
+
+        $expense_amount = str_replace( [','], ['.'], $expense_amount );
+        $expense_category_id = static::getUserExpenseCategoryId($expense_category, $user_id) ;
+        $payment_category_id = static::getUserPaymentCategoryId($payment_category, $user_id) ;
+
+        $stmt = $db->prepare( 'UPDATE expenses SET amount = :expense_amount, date_of_expense =:date_of_expense, expense_comment = :expense_comment, expense_category_assigned_to_user_id = :expense_category_id, payment_method_assigned_to_user_id = :payment_category_id WHERE id = :expense_id AND user_id = :user_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_id', $expense_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_category_id', $expense_category_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':payment_category_id', $payment_category_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':date_of_expense', $date_of_expense, PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_amount', $expense_amount, PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_comment', $expense_comment, PDO::PARAM_STR);       
+
+
+        return $stmt->execute();
+    }
+
+    public static function getSingleCategoryExpenses ($date, $user_id, $expense_category_id) 
+    {
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT * FROM expenses WHERE user_id = :user_id AND expense_category_assigned_to_user_id =:expense_category_assigned_to_user_id AND date_of_expense BETWEEN :first_date AND :second_date ORDER BY date_of_expense DESC' );
+        
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
+        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_category_assigned_to_user_id', $expense_category_id, PDO::PARAM_INT ); 
+        
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        $stmt->execute();
+        
+        return $stmt->fetchAll();
+    }
+
+    
+     public static function getUserCategoryLimit ($user_id, $expense_category_name) 
+     {
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT expenseLimit FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name =:name' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $expense_category_name, PDO::PARAM_STR );
+        
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    public static function getUserExpenseCategoryId($expense_category, $user_id) 
+    {
+        $sql = 'SELECT id, user_id, name FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :name';
+
+        $db = static::getDB();
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $expense_category, PDO::PARAM_STR );
+        $stmt->execute();
+
+        $categories = $stmt -> fetch();
+
+        return $categories['id'];
+    }
+
+
+
+    public static function getUserPaymentCategoryId($payment_category, $user_id) 
+    {
+        $sql = 'SELECT id, user_id, name FROM payment_methods_assigned_to_users WHERE user_id = :user_id AND name = :name';
+
+        $db = static::getDB();
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $payment_category, PDO::PARAM_STR );
+        $stmt->execute();
+
+        $categories = $stmt -> fetch();
+
+        return $categories['id'];
+    }
+    
+     public static function deleteSingleExpense ($user_id, $expense_id) 
+    {
+        $db = static::getDB(); 
+        
+        $stmt = $db->prepare('DELETE FROM expenses WHERE user_id = :user_id AND id = :expense_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':expense_id', $expense_id, PDO::PARAM_INT );
+
+        return $stmt->execute();
+    }
+
+    public static function getSingleExpenseCategoryId($expense_category_name)
+    {
+        $user_id = $_SESSION['user_id'];                  
+        
+        $db = static::getDB();        
+        
+            
+        $stmt = $db->prepare('SELECT id FROM expenses_category_assigned_to_users WHERE name = :expense_category_name AND user_id = :user_id ');
+        
+        $stmt->bindValue( ':expense_category_name', $expense_category_name, PDO::PARAM_STR );
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->execute();                
+            
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getExpensesCategoryLimit($user_id, $expense_category)
+    {
+        $user_id = $_SESSION['user_id'];                  
+        
+        $db = static::getDB();        
+        
+            
+        $stmt = $db->prepare('SELECT expenseLimit FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :expense_category');
+            
+        $stmt->bindValue( ':expense_category', $expense_category, PDO::PARAM_STR );        
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );        
+        $stmt->execute();
+        $expenseLimitArray=$stmt->fetchAll();
+        $expenseLimit=array_sum(array_column($expenseLimitArray, 'expenseLimit'));
+        return $expenseLimit;
+    }
+
+    public static function getExpensesSumForLimit($expense_date, $expense_category, $user_id) 
+    {
+        $user_id = $_SESSION['user_id'];
+        $expense_category_id = static::getUserExpenseCategoryId($expense_category, $user_id); 
+          
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT ROUND(SUM(exp.amount), 2) as expenseSumArray FROM expenses as exp WHERE exp.expense_category_assigned_to_user_id = :expense_category_id AND exp.user_id = :user_id AND exp.date_of_expense BETWEEN :first_date AND :second_date'); 
+
+        $stmt->bindValue( ':first_date', $expense_date['first_date'], PDO::PARAM_STR );
+        $stmt->bindValue( ':second_date', $expense_date['second_date'], PDO::PARAM_STR );              
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT ); 
+        $stmt->bindValue( ':expense_category_id', $expense_category_id, PDO::PARAM_INT );   
+        $stmt->execute();
+        $expenseSumArray=$stmt->fetchAll();
+        $expenseSum=array_sum(array_column($expenseSumArray, 'expenseSumArray'));    
+        return $expenseSum;
+    }
+    /*
+    public static function getExpensesSumForLimit($expense_date, $expense_category, $user_id) 
+    {
+
+        $user_id = $_SESSION['user_id'];
+        $expense_category_id = static::getUserExpenseCategoryId($expense_category, $user_id); 
+          
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT ROUND(SUM(exp.amount), 2) as expenseSumArray FROM expenses as exp WHERE expense_category_assigned_to_user_id = :expense_category_id AND exp.user_id = :user_id AND exp.date_of_expense BETWEEN :first_date AND :second_date'); 
+
+        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
+        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
+        $stmt->bindValue( ':expense_category', $expense_category, PDO::PARAM_STR );        
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT ); 
+        $stmt->bindValue( ':expense_category_id', $expense_category_id, PDO::PARAM_INT );   
+        $stmt->execute();
+        $incomeSumArray=$stmt->fetchAll();
+        $incomeSum=array_sum(array_column($expenseSumArray, 'expenseSumArray'));    
+        return $expenseSum;
+    }
+    */
+
 }

@@ -30,6 +30,9 @@ $router->add('{controller}/{action}');
 $router->add('income', ['controller' => 'addIncome', 'action' => 'new']);
 $router->add('addIncome', ['controller' => 'addIncome', 'action' => 'create']);
 
+$router->add('addExpense/getExpenseCategoryLimit/', ['controller' => 'addExpense', 'action' => 'getExpenseCategoryLimit']);
+$router->add('addExpense/getExpensesSumForLimit/', ['controller' => 'addExpense', 'action' => 'getExpensesSumForLimit']);
+
 $router->add('{controller}/{id:\d+}/{action}');
 $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
 $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);

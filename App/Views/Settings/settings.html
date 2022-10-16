@@ -47,11 +47,19 @@
 							 
 
 							{% if active==1 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}								
 							
 						</form>
@@ -66,7 +74,7 @@
 			        	<form class="card-body mx-auto" action="editIncomeCategory" method="post"> 
 			        		<label class="formTitle">Edytuj kategorię</label>
 
-							<select class="form-control col-12 borderDesign" name="incomeCategory" required>
+							<select id = "incomeCategory" class="form-control col-12 borderDesign" name="incomeCategory" onchange="incomeCategory()"  required>
 								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
 								{% for value in userIncomeCategories %}
 	                            <option value="{{value.name}}">{{value.name}}</option>                                
@@ -75,18 +83,26 @@
 
 							<div class="col-12">
 								<label class="formTitle" for="editedIncomeCategory">Nowa kategoria</label>
-								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value = "" required>
+								<input type="text" class="form-control borderDesign" id="editedIncomeCategory" name="editedIncomeCategory" value ="" required>
 							</div>
 
 							<div class="d-flex justify-content-center py-4">
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Zastosuj</button>	
 							</div>
 							{% if active==2 %}
-							{% if error is not empty %}                              
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 			    	</div>
@@ -96,6 +112,7 @@
 					</button>
 
 					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#incomeAccordionExample">
+					<h4><span class = "deleteCategory"></span></h4>
 			        	<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        			  				
 
@@ -114,9 +131,9 @@
 												<h5 class="modal-title text-center" id="deleteIncomeModalId">Podaj kategorię którą chcesz usunąć</h5>
 											</div>
 											<form action="deleteIncomesCategory" method='post'>
-												<div class="modal-body">
+												<div class="modal-body">													
 													<form action="getSingleIncomeRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" required>
+														<select class="form-control col-12 borderDesign" name="deletedIncomeCategory" id="deletedIncomeCategory" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
 															{% for value in userIncomeCategories %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
@@ -127,9 +144,30 @@
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxIncome" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+
+													<div class="modal fade" id="alertIncomeModal" tabindex="-1" role="dialog" aria-labelledby="alertIncomeModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">
+													          <p id="errorIncome" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>
+
 												</div>
+
 											</form>
 										</div>
 									</div>
@@ -173,14 +211,17 @@
 
 							{% if active==3 %}
 							{% if error and pass is not empty %}
-							<div class="correct">{{pass|join('<br/>')|raw}}</div>                           
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
-                            {% else %}
-                            {% if error is not empty %}
-                            <div class="error">{{error|join('<br/>')|raw}}</div> 
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
 							{% endif %}	
 							{% endif %}	
 			    	</div>
@@ -200,17 +241,30 @@
 								<label class="formTitle" for="newExpenseCategory">Nowa kategoria</label>
 								<input type="text" class="form-control borderDesign" id="newExpenseCategory" name="newExpenseCategory" value = "" required>
 							</div>
+							<div class="form-check mb-2 limitCheckbox">
+                                <input type="checkbox" class="form-check-input" name = "expenseLimit" id="newLimit">
+                                <label class="form-check-label" for="limitCheckbox">Ustaw limit</label>
+                            </div>
+                            <input type="number" class="form-control mb-3" name = "newExpenseLimits" id = "newExpenseLimits" style = "display: none;">
 							<div class="row d-flex justify-content-center py-4">
 								<div class="col-12 col-sm-1"></div>
 								<button id="submitBtn" class="btn btn-success col-12 col-sm-8" type="submit" value="Submit">Dodaj</button>	
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==4 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -232,6 +286,11 @@
 								<option value="{{value.name}}">{{value.name}}</option>                                
 								{% endfor %}
 							</select>
+							<div class="form-check mb-2 limitCheckbox">
+                                <input type="checkbox" class="form-check-input" name = "expenseLimit" id="limitCheckbox">
+                                <label class="form-check-label" for="limitCheckbox">Ustaw limit</label>
+                            </div>
+                            <input type="number" class="form-control mb-3" name = "limitAmount" id = "limitAmount" style = "display: none;">
 
 							<div class="col-12">
 								<label class="formTitle" for="editedExpenseCategory">Nowa kategoria:</label>
@@ -244,11 +303,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==5 %}
-							{% if error is not empty %}                            
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -259,6 +326,7 @@
 					</button>
 					
 					<div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#expenseAccordionExample">
+						<h4><span class = "deleteCategory"></span></h4>
 						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        		<select class="form-control borderDesign text-left" id="delete_expense_option" name="delete_option" autocomplete="off" required>
 								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
@@ -276,19 +344,37 @@
 											<form action="deleteExpensesCategory" method='post'>
 												<div class="modal-body">
 													<form action="getSingleExpenseRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" required>
+														<select class="form-control col-12 borderDesign" name="deletedExpenseCategory" id="deletedExpenseCategory" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz kategorię</option>
 															{% for value in userExpenseCategories %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
 								                        	{% endfor %}
 														</select>
-													</form>													
+													</form>												
 													
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxExpense" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+													<div class="modal fade" id="alertExpenseModal" tabindex="-1" role="dialog" aria-labelledby="alertExpenseModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">													          
+													          <p id="errorExpense" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>													 
 												</div>
 											</form>
 										</div>
@@ -337,12 +423,14 @@
 							<div class="correct">{{pass|join('<br/>')|raw}}</div>
 							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
 							{% else %}
+
 							{% if error is not empty %}
 							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
 
-                            {% endif %}	
+                            {% endif %}
+                            	
 							{% endif %}	
 							{% endif %}	
 					</div>
@@ -370,11 +458,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==7 %}
-							{% if error is not empty %}                           
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -405,11 +501,19 @@
 								<div class="col-12 col-sm-1"></div>
 							</div>
 							{% if active==8 %}
-							{% if error is not empty %}                             
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							{% if error and pass is not empty %}
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
                             <div class="correct">{{pass|join('<br/>')|raw}}</div>
-							{% endif %}
+
+                            {% endif %}
+                            	
+							{% endif %}	
 							{% endif %}	
 						</form>	
 					</div>
@@ -419,6 +523,7 @@
 					</button>
 
 					<div id="collapseNine" class="collapse" aria-labelledby="headingNine" data-parent="#paymentAccordionExample">
+						<h4><span class = "deleteCategory"></span></h4>
 						<form class="card-body mx-auto" action="chooseDeleteOption" method="post">
 			        		<select class="form-control borderDesign text-left" id="delete_payment_option" name="delete_option" autocomplete="off" required>
 								<option title = "Wybierz jedną z poniższych opcji:" value="" disabled selected hidden>Wybierz opcję</option>		
@@ -436,7 +541,7 @@
 											<form action="deletePaymentMethod" method='post'>
 												<div class="modal-body">
 													<form action="getSinglePaymentRecords" method='post'>
-														<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" required>
+														<select class="form-control col-12 borderDesign" name="deletedPaymentMethod" id="deletedPaymentMethod" required>
 															<option title = "Kategoria" value="" disabled selected hidden>Wybierz metodę płatności</option>
 															{% for value in userPaymentMethods %}
 								                        	<option value="{{value.name}}"> {{value.name}} </option>                              
@@ -447,8 +552,27 @@
 													
 													<div class="modal-footer">
 														<button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-														<input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+														<input type="button" id="alertBoxPayment" style="width:50px; height:38px; margin:0;" value='OK'>
 													</div>
+
+													<div class="modal fade" id="alertPaymentModal" tabindex="-1" role="dialog" aria-labelledby="alertPaymentModal" aria-hidden="true">
+													    <div class="modal-dialog" role="document">										    
+													     
+													      <div class="modal-content text-center">
+													        <div class="modal-header d-flex justify-content-between align-items-center">										<div class="col-4"></div>		          
+													          <h4 class="modal-title col-4">Ostrzeżenie</h4>
+													          <button type="button" class="close col-4" data-dismiss="modal">&times;</button>
+													        </div>
+													        <div class="modal-body">
+													          <p id="errorPayment" style="color:red;"></p>											          
+
+													        </div>
+													        <div class="modal-footer d-flex justify-content-center">
+													          <input type="submit" style="width:50px; height:38px; margin:0;" value='OK'>
+													        </div>
+													      </div>													      
+													    </div>
+													 </div>
 												</div>
 											</form>
 										</div>
@@ -493,16 +617,19 @@
 
 							{% if active==9 %}
 							{% if error and pass is not empty %}
-							<div class="correct">{{pass|join('<br/>')|raw}}</div>                    
-                            <div class="error">{{error|join('<br/>')|raw}}</div>                                   
+							<div class="correct">{{pass|join('<br/>')|raw}}</div>
+							<div class="error">{{error|join('<br/>')|raw}}</div>				                         
+							{% else %}
+
+							{% if error is not empty %}
+							<div class="error">{{error|join('<br/>')|raw}}</div>
                             {% else %}
-                            {% if error is not empty %}
-                           	<div class="error">{{error|join('<br/>')|raw}}</div>
-                           	{% else %}
-                           	<div class="correct">{{pass|join('<br/>')|raw}}</div> 
-							{% endif %}
-							{% endif %}
-							{% endif %}
+                            <div class="correct">{{pass|join('<br/>')|raw}}</div>
+
+                            {% endif %}
+                            	
+							{% endif %}	
+							{% endif %}	
 					</div>
 				</div>
 
@@ -519,6 +646,34 @@
 {% endblock %}
 
 {% block scripts %}
+<script src = "/js/expense-limit.js"></script>
+<script>
+	$('#limitCheckbox').change(function() 
+	{
+    if($(this).is(":checked")) 
+    {        
+        $('#limitAmount').css("display", "inline");
+    }
+    else 
+    {
+        $('#limitAmount').css("display", "none");        
+    }
+});
+
+$('#newLimit').change(function()
+{
+    if($(this).is(":checked")) 
+    {        
+        $('#newExpenseLimits').css("display", "inline");
+    }
+    else 
+    {
+        $('#newExpenseLimits').css("display", "none");        
+    }
+});
+
+
+</script>
 <script>
 $(document).ready(function()
 {  
@@ -635,5 +790,42 @@ $(document).ready(function()
     });
 });
 </script>
+<script>
+	$(document).ready(function()
+	{
+	  $('#alertBoxIncome').click(function()
+	  {
+		var deletedIncomeCategory = document.getElementById("deletedIncomeCategory").value;
+	    $("#errorIncome").html("Czy na pewno chcesz usunąć kategorię przychodów "+deletedIncomeCategory+"?");
+	      $('#alertIncomeModal').modal("show");
+	  });  
+
+	});
+</script>
+<script>
+	$(document).ready(function()
+	{	 
+	  $('#alertBoxExpense').click(function()
+	  {
+	  	var deletedExpenseCategory = document.getElementById("deletedExpenseCategory").value;
+	    $("#errorExpense").html("Czy na pewno chcesz usunąć kategorię wydatków "+deletedExpenseCategory+"?");
+	      $('#alertExpenseModal').modal("show");
+	  });
+
+	});
+</script>
+<script>
+	$(document).ready(function()
+	{	 
+	  $('#alertBoxPayment').click(function()
+	  {
+	  	var deletedPaymentMethod = document.getElementById("deletedPaymentMethod").value;
+	    $("#errorPayment").html("Czy na pewno chcesz usunąć kategorię płatności "+deletedPaymentMethod+"?");
+	      $('#alertPaymentModal').modal("show");
+	  });
+
+	});
+</script>
+
 
 {% endblock %}

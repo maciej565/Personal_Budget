@@ -37,6 +37,21 @@ class Income extends \Core\Model
         return $categories['id'];
     }
 
+    public static function getSingleIncomeData ($incomeId) 
+    {
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE id = :id');
+
+        $stmt->bindValue( ':id', $incomeId, PDO::PARAM_INT );
+
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+    
+
     
 
     public function saveUserIncome($user_id) 
@@ -111,6 +126,38 @@ class Income extends \Core\Model
 
         return $stmt->fetchAll();
     }
+
+    public static function checkIncomeCategoryRecordsExists($user_id, $deletedIncomesCategoryName) 
+    {
+        
+        $deletedIncomesCategoryId = static::getEditedIncomeCategoryId($user_id, $deletedIncomesCategoryName);
+        $db = static::getDB();
+
+        $stmt = $db->prepare( 'SELECT * FROM incomes WHERE user_id = :user_id AND income_category_assigned_to_user_id =:category_id' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':category_id', $deletedIncomesCategoryId, PDO::PARAM_STR );
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public static function getEditedIncomeCategoryId( $user_id, $incomeCategoryName)
+    {
+
+        $db = static::getDB();
+        
+        $stmt = $db->prepare( 'SELECT id FROM incomes_category_assigned_to_users WHERE name =:name AND user_id =:user_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $incomeCategoryName, PDO::PARAM_STR );
+        
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
 
 
     public static function addNewIncomeCategory( $user_id, $newIncomeCategoryName)
@@ -222,5 +269,52 @@ class Income extends \Core\Model
             $stmt->execute();
         }
         return true;
+    }
+
+    public static function editSingleIncome($user_id, $income_id, $income_comment, $income_amount, $date_of_income, $income_category)
+    {
+        $db = static::getDB();
+
+        $income_amount = str_replace( [','], ['.'], $income_amount );
+        $income_category_id = static::getUserIncomeCategoryId($income_category, $user_id) ;
+        
+        $stmt = $db->prepare( 'UPDATE incomes SET amount = :income_amount, date_of_income =:date_of_income, income_comment = :income_comment, income_category_assigned_to_user_id = :income_category_id WHERE id = :income_id AND user_id = :user_id ');
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':income_id', $income_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':income_category_id', $income_category_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':date_of_income', $date_of_income, PDO::PARAM_STR );
+        $stmt->bindValue( ':income_amount', $income_amount, PDO::PARAM_STR );
+        $stmt->bindValue( ':income_comment', $income_comment, PDO::PARAM_STR); 
+
+        return $stmt->execute();
+    }
+
+    public static function getUserIncomeCategoryId($income_category, $user_id) 
+    {
+        $sql = 'SELECT id, user_id, name FROM incomes_category_assigned_to_users WHERE user_id = :user_id AND name = :name';
+
+        $db = static::getDB();
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':name', $income_category, PDO::PARAM_STR );
+        $stmt->execute();
+
+        $income_categories = $stmt -> fetch();
+
+        return $income_categories['id'];
+    }
+
+    public static function deleteSingleIncome ($user_id, $income_id) 
+    {
+        $db = static::getDB(); 
+        
+        $stmt = $db->prepare('DELETE FROM incomes WHERE user_id = :user_id AND id = :income_id ' );
+
+        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT );
+        $stmt->bindValue( ':income_id', $income_id, PDO::PARAM_INT );
+
+        return $stmt->execute();
     }
 }

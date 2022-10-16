@@ -8,10 +8,10 @@
 {% block body %}
 <div class="d-flex justify-content-center">
 			<div class="addExpenseContainer col-12 col-sm-8 col-lg-6 col-xl-6 text-center">
-				<form class="card-body mx-auto" action="create" method="post">
-					<br>
+				<form class="card-body mx-auto" action="create" method="post">					
 					<span class="card-title title">Dodaj wydatek</span>
-					<hr>
+					<hr>		
+                            
 					<div class="row">											
 						<div class="col-12 col-md-6 py-1">								
 							<label class="formTitle" for="expense_amount">Kwota:</label>						
@@ -19,12 +19,13 @@
 							{% if errors.amountError is not empty%}                            
                             <div class="error">{{errors.amountError|join('<br/>')|raw}}</div>                         
                             {% endif %}	
+                            <span class="error" id="expenses_limit"></span>
 						</div>
 						
 						<!-- expense_date -->
 						<div class="col-12 col-md-6 py-1 ">								
 							<label class="formTitle">Data:</label>
-							<input type="date" class="form-control borderDesign" name="date" type="date" value = "{% if expenses.date is defined %}{{expenses.date}}{% else %}{{currentDate}}{% endif %}" required>
+							<input type="date" class="form-control borderDesign" name="date" id="expense_date" type="date" value = "{% if expenses.date is defined %}{{expenses.date}}{% else %}{{currentDate}}{% endif %}" required>
 							{% if errors.dateError is not empty%}                            
                             <div class="error">{{errors.dateError|join('<br>')|raw}}</div>                         
                             {% endif %}
@@ -34,11 +35,13 @@
 					<div class="row d-flex justify-content-center">
 						<div class="col-12 col-md-6 py-1">
 							<label class="formTitle">Kategoria:</label>
-							<select class="form-control col-12 borderDesign" name="expense_category" required>
-							<option title = "Kategoria" value="" disabled selected hidden> Kategoria</option>
-							{% for value in userExpenseCategories %}
-                            <option value="{{value.name}}"> {{value.name}} </option>                                
+							<select class="form-control col-12 borderDesign" name="expense_category" id="expense_category" onchange="expenseLimit()"  required>
+							<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>							
+							{% for value in userExpenseCategories %}							
+                            <option value="{{value.name}}"> {{value.name}} </option>                                                                                    
                             {% endfor %}
+                            <option  id = "switcher" value="" hidden></option> 
+                            
 							</select>
 						</div>	
 							
@@ -85,5 +88,6 @@
 {% endblock %}
 
 {% block scripts %}
-      
+<script type="text/javascript" src ="/js/expense-limits-errors.js"></script>
+
 {% endblock %}

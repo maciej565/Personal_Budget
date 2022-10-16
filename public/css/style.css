@@ -8,7 +8,8 @@ html
 }
 
 body
-{		
+{
+	overflow-x:hidden;		
 	height: 100%;
 	text-align:center;	
 	background-color: #f2f2f2 !important ;
@@ -447,8 +448,8 @@ border-color: #1073FF !important;
 
 .welcomeBar
 {	
-	margin-top: 4vh;
-	margin-bottom: 4vh;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
 	font-family: 'Oswald', sans-serif;
 	font-size:32px;		
 	font-weight: bold;
@@ -519,33 +520,45 @@ border-color: #1073FF !important;
 	grid-template-rows: 1fr;	
 			
 }
+.errorContainer
+{
+	font-family: 'Oswald', sans-serif;
+	margin-top: 6vh;
+	margin-bottom: 10vh;
+	font-weight: bold;
+	border-radius:45px;
+	grid-template-rows: 1fr;
+	background-color: white;
+	color: #092834;
+
+}
 
 .addIncomeBar
 {	
 	color:#055F07;
-	font-size:120px;
-	margin:10px;
+	font-size:80px;
+	margin:5px;
 }
 
 
 .addExpenseBar
 {	
 	color:#FF6800;
-	font-size:120px;
-	margin:10px;
+	font-size:80px;
+	margin:5px;
 }
 
 .currentMonthBalanceBar
 {	
-	font-size:120px;
-	margin:10px;
+	font-size:80px;
+	margin:5px;
 	color:#FF00FF;
 }
 
 .previousMonthBalanceBar
 {	
-	font-size:120px;
-	margin:10px;
+	font-size:80px;
+	margin:5px;
 	color:#800080;
 }
 
