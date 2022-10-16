@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Models\Expense;
+use \App\Models\DateManager;
 use \App\Flash;
 
 
@@ -22,12 +23,13 @@ class addExpense extends Authenticated
         $currentDate = Flash::getCurrentDate();
         $userExpenseCategories = Expense::getUserExpenseCategories( $this->user->id);
         $userPaymentMethods = Expense::getUserPaymentMethods( $this->user->id);
-
+        
         View::renderTemplate('Mainpage/expense.html', 
         [
             'user' => $this->user,
             'expenses' => $arg1,
             'errors' => $arg2,
+            'success' => $success,
             'userExpenseCategories' => $userExpenseCategories,
             'userPaymentMethods' => $userPaymentMethods,
             'currentDate' => $currentDate
@@ -79,4 +81,40 @@ class addExpense extends Authenticated
             $this -> newAction( $expenses, $errors);
         }
     }
+
+    public function getExpenseCategoryLimitAction() 
+    { 
+        $expense_category = $_GET['expense_category'];
+        $expense_date = $_GET['expense_date'];
+        $expense_amount = $_GET['expense_amount'];
+        $user_id = $this->user->id;
+        $expense_limit = Expense::getExpensesCategoryLimit($user_id, $expense_category);
+        $expenses_sum = static::getExpensesSumForLimit($expense_date, $expense_category);
+        $expense_limit_diff = $expense_limit - $expenses_sum - $expense_amount;
+        if($expense_limit_diff < 0)
+        {
+            $expense_alert = "Uważaj przekroczysz limit o ".-($expense_limit_diff)." zł dla kategorii: ".$expense_category."!";                   
+        }
+        else
+        {
+            $expense_alert = "Pozostało ".$expense_limit_diff." zł dla kategorii: ".$expense_category;  
+        }
+
+        echo json_encode($expense_alert, JSON_UNESCAPED_UNICODE);
+          
+    }
+
+    public function getExpensesSumForLimit($date, $expense_category)
+    {
+        $user_id = $this->user->id; 
+        $year = date("Y",strtotime($date));
+        $month = date("m",strtotime($date));
+        $day = date("d",strtotime($date));
+
+        $expense_date = DateManager::getFirstSecondDate($year,$month,$day);        
+        $expenses_sum = Expense::getExpensesSumForLimit($expense_date, $expense_category, $user_id);
+        return $expenses_sum;   
+    }
+
+    
 }
