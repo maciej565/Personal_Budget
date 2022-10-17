@@ -74,7 +74,7 @@
 			        	<form class="card-body mx-auto" action="editIncomeCategory" method="post"> 
 			        		<label class="formTitle">Edytuj kategorię</label>
 
-							<select id = "incomeCategory" class="form-control col-12 borderDesign" name="incomeCategory" onchange="incomeCategory()"  required>
+							<select id = "incomeCategory" class="form-control col-12 borderDesign" name="incomeCategory" required>
 								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
 								{% for value in userIncomeCategories %}
 	                            <option value="{{value.name}}">{{value.name}}</option>                                
@@ -280,7 +280,7 @@
 						<form class="card-body mx-auto" action="editExpenseCategory" method="post">
 							<label class="formTitle">Edytuj kategorię</label>
 
-							<select class="form-control col-12 borderDesign" name="oldExpenseCategoryName" required>
+							<select class="form-control col-12 borderDesign" name="oldExpenseCategoryName" id="oldExpenseCategoryName" onchange="expenseCategoryLimit()" required>
 								<option title = "Kategoria" value="" disabled selected hidden>Kategoria</option>
 								{% for value in userExpenseCategories %}
 								<option value="{{value.name}}">{{value.name}}</option>                                
@@ -294,7 +294,7 @@
 
 							<div class="col-12">
 								<label class="formTitle" for="editedExpenseCategory">Nowa kategoria:</label>
-								<input type="text" class="form-control borderDesign" id="editedExpenseCategory" name="editedExpenseCategory" value = "" required>
+								<input type="text" class="form-control borderDesign" id="editedExpenseCategory" name="editedExpenseCategory" value = ""  required>
 							</div>
 
 							<div class="row d-flex justify-content-center py-4">

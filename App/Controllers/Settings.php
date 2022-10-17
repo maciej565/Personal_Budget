@@ -400,5 +400,14 @@ class Settings extends Authenticated
 	        $active ='9';
 	        $this -> newAction( $pass, $error, $active);
         }
-    }              
+    }
+
+     public function getExpenseCategoryLimitForSettingsAction() 
+    { 
+        $expense_category = $_GET['expense_category'];       
+        $user_id = $this->user->id;
+        $expense_limit = Expense::getExpensesCategoryLimit($user_id, $expense_category);
+       
+        echo json_encode($expense_limit, JSON_UNESCAPED_UNICODE); 
+    }   
 }

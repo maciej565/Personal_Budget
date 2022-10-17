@@ -32,6 +32,7 @@ $router->add('addIncome', ['controller' => 'addIncome', 'action' => 'create']);
 
 $router->add('addExpense/getExpenseCategoryLimit/', ['controller' => 'addExpense', 'action' => 'getExpenseCategoryLimit']);
 $router->add('addExpense/getExpensesSumForLimit/', ['controller' => 'addExpense', 'action' => 'getExpensesSumForLimit']);
+$router->add('Settings/getExpenseCategoryLimitForSettings/', ['controller' => 'Settings', 'action' => 'getExpenseCategoryLimitForSettings']);
 
 $router->add('{controller}/{id:\d+}/{action}');
 $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
