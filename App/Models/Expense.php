@@ -558,28 +558,6 @@ class Expense extends \Core\Model
         $expenseSumArray=$stmt->fetchAll();
         $expenseSum=array_sum(array_column($expenseSumArray, 'expenseSumArray'));    
         return $expenseSum;
-    }
-    /*
-    public static function getExpensesSumForLimit($expense_date, $expense_category, $user_id) 
-    {
-
-        $user_id = $_SESSION['user_id'];
-        $expense_category_id = static::getUserExpenseCategoryId($expense_category, $user_id); 
-          
-        $db = static::getDB();
-
-        $stmt = $db->prepare( 'SELECT ROUND(SUM(exp.amount), 2) as expenseSumArray FROM expenses as exp WHERE expense_category_assigned_to_user_id = :expense_category_id AND exp.user_id = :user_id AND exp.date_of_expense BETWEEN :first_date AND :second_date'); 
-
-        $stmt->bindValue( ':first_date', $date['first_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':second_date', $date['second_date'], PDO::PARAM_STR );
-        $stmt->bindValue( ':expense_category', $expense_category, PDO::PARAM_STR );        
-        $stmt->bindValue( ':user_id', $user_id, PDO::PARAM_INT ); 
-        $stmt->bindValue( ':expense_category_id', $expense_category_id, PDO::PARAM_INT );   
-        $stmt->execute();
-        $incomeSumArray=$stmt->fetchAll();
-        $incomeSum=array_sum(array_column($expenseSumArray, 'expenseSumArray'));    
-        return $expenseSum;
-    }
-    */
+    }  
 
 }
